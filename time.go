@@ -1,0 +1,217 @@
+package utils
+
+import (
+	"fmt"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/go-kratos/kratos/v2/log"
+)
+
+const (
+	TIME_LAYOUT       = "2006-01-02 15:04:05"
+	DATE_LAYOUT       = "2006-01-02"
+	YMD_LAYOUT        = "20060102"
+	YEAR_MONTH_LAYOUT = "200601"
+	HOUR_LAYOUT       = "15:04"
+	MIN_LAYOUT        = "15:04"
+)
+
+var location, _ = time.LoadLocation("Asia/Shanghai")
+
+// TimeToString
+func TimeToString(t *time.Time) string {
+	// 获取指定时间
+	if t != nil {
+		if t.Year() == 1970 {
+			return ""
+		}
+		return t.Format(TIME_LAYOUT)
+	}
+	// 获取当前时间
+	return time.Now().Format(TIME_LAYOUT)
+}
+
+// TimeToDateString 2006-01-02
+func TimeToDateString(t *time.Time) string {
+	// 获取指定时间
+	if t != nil {
+		if t.Year() == 1970 {
+			return ""
+		}
+		return t.Format(DATE_LAYOUT)
+	}
+	// 获取当前时间
+	return time.Now().Format(DATE_LAYOUT)
+}
+
+// DateStringToYmdInt 2006-01-02(string) -> 20060102(int64)
+func DateStringToYmdInt(dt string) int64 {
+	if len(dt) == 0 {
+		return 0
+	}
+	t, err := time.ParseInLocation(DATE_LAYOUT, dt, location)
+	if err != nil {
+		log.Error(err.Error())
+		return 0
+	}
+	ymd, err2 := strconv.ParseInt(t.Format(YMD_LAYOUT), 10, 64)
+	if err2 != nil {
+		log.Error(err2.Error())
+		return 0
+	}
+	return ymd
+}
+
+// YesterdayDateString 昨天Ymd
+func YesterdayDateString(layout string) string {
+	loc := time.Now()
+	return time.Date(loc.Year(), loc.Month(), loc.Day()-1, 0, 0, 0, 0, location).Format(layout)
+}
+
+// YmdIntToDateString 20060102(int64) -> 2006-01-02(string)
+func YmdIntToDateString(dt int64) string {
+	if dt == 0 {
+		return "-"
+	}
+	t, err := time.ParseInLocation(YMD_LAYOUT, strconv.FormatInt(dt, 10), location)
+	if err != nil {
+		log.Error(err.Error())
+		return "-"
+	}
+	return t.Format(DATE_LAYOUT)
+}
+
+// CurrentMonth 当月起始日期
+func CurrentMonth() (string, string) {
+	loc := time.Now()
+	firstOfMonth := time.Date(loc.Year(), loc.Month(), 1, 0, 0, 0, 0, location)
+	lastOfMonth := firstOfMonth.AddDate(0, 1, -1)
+	return firstOfMonth.Format(YMD_LAYOUT), lastOfMonth.Format(YMD_LAYOUT)
+}
+
+// CurrentYearMonth 200601
+func CurrentYearMonth() string {
+	return time.Now().Format(YEAR_MONTH_LAYOUT)
+}
+
+// IntToTime
+func IntToTime(ts int64) time.Time {
+	a := time.Unix(ts, 0)
+	return a
+}
+
+// TimeStringToTime
+func TimeStringToTime(ts string) time.Time {
+	t, err := time.ParseInLocation(TIME_LAYOUT, ts, location)
+	if err != nil {
+		log.Error(err.Error())
+		return time.Now()
+	}
+	return t
+}
+
+func TimeStringToTime1(ts string, layout string) time.Time {
+	t, err := time.ParseInLocation(layout, ts, location)
+	if err != nil {
+		log.Error(err.Error())
+		return time.Now()
+	}
+	return t
+}
+
+func DateStringToTime(ts string) time.Time {
+	t, err := time.ParseInLocation(DATE_LAYOUT, ts, location)
+	if err != nil {
+		log.Error(err.Error())
+		return time.Now()
+	}
+	return t
+}
+
+// Int2Time 时间戳转 时间字符串 "Y-m-d H:i:s"
+func Int2Time(ts int64) string {
+	if ts == 0 {
+		return ""
+	}
+	// return time.go.Unix(ts, 0).Format(TIME_LAYOUT)
+	t := IntToTime(ts)
+	return TimeToString(&t)
+}
+
+// Int2Date 时间字符串 "Y-m-d"
+func Int2Date(ts int64) string {
+	if ts == 0 {
+		return ""
+	}
+	t := IntToTime(ts)
+	return TimeToDateString(&t)
+}
+
+func StringToUnixTime(ts string) int64 {
+	t := TimeStringToTime(ts)
+	return t.Unix()
+}
+
+func DateStringToUnixTime(ts string) int64 {
+	if ts == "" {
+		return 0
+	}
+	t := DateStringToTime(ts)
+	return t.Unix()
+}
+
+func FormatDurationTxt(startTime, endTime int64) string {
+	if startTime == 0 || endTime == 0 {
+		return "不限"
+	}
+	txt := fmt.Sprintf("%s - %s", IntToTime(startTime).Format(DATE_LAYOUT), IntToTime(endTime).Format(DATE_LAYOUT))
+	if strings.TrimSpace(txt) == "" {
+		return "不限"
+	}
+	return txt
+}
+
+// Hour2DateTime hour转时间点
+// 当date为""时：  1=> 01:00、 2=> 02:00、 ... 、 23=>23:00
+// 当date为"2022-11-11"时:   1=> 2022-11-11 01:00、 2=> 2022-11-11 02:00、 ... 、 23=>2022-11-11 23:00
+func Hour2DateTime(date string, hour int) string {
+	hourTime := time.Date(0, 0, 0, hour, 0, 0, 0, location).Format(HOUR_LAYOUT)
+	if len(date) > 0 {
+		return date + " " + hourTime
+	}
+	return hourTime
+}
+
+// Point2DateTime point转时间点（1个point代表5分钟）
+// 当date为""时：   0 => 00:00 、 1 => 00:05、 ... 、287 => 23:55
+// 当date为"2022-11-11"时：  0 => 2022-11-11 00:00 、 1 => 2022-11-11 00:05、 ... 、287 => 2022-11-11 23:55
+func Point2DateTime(date string, point int) string {
+	min := point * 5
+	hourMin := time.Date(0, 0, 0, 0, min, 0, 0, location).Format(MIN_LAYOUT)
+	if len(date) > 0 {
+		return date + " " + hourMin
+	}
+	return hourMin
+}
+
+func Time2Point(date string) int64 {
+	ts := time.Now()
+	point := ts.Hour()*12 + ts.Minute()/5
+	return int64(point)
+}
+
+// DiffDateOfDay 计算两个日期（Ymd）间隔天数
+func DiffDateOfDay(start, end string) float64 {
+	t1, _ := time.Parse(DATE_LAYOUT, start)
+	t2, _ := time.Parse(DATE_LAYOUT, end)
+	return (t2.Sub(t1).Hours() / 24) + 1
+}
+
+// 距离明天0点的时间（用于缓存自然天）
+func TodayLastTime() time.Duration {
+	loc := time.Now()
+	tomorrow := time.Date(loc.Year(), loc.Month(), loc.Day()+1, 0, 0, 0, 0, location)
+	return tomorrow.Sub(loc)
+}
