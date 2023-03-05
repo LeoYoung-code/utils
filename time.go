@@ -10,12 +10,12 @@ import (
 )
 
 const (
-	TIME_LAYOUT       = "2006-01-02 15:04:05"
-	DATE_LAYOUT       = "2006-01-02"
-	YMD_LAYOUT        = "20060102"
-	YEAR_MONTH_LAYOUT = "200601"
-	HOUR_LAYOUT       = "15:04"
-	MIN_LAYOUT        = "15:04"
+	TimeLayout      = "2006-01-02 15:04:05"
+	DateLayout      = "2006-01-02"
+	YmdLayout       = "20060102"
+	YearMonthLayout = "200601"
+	HourLayout      = "15:04"
+	MinLayout       = "15:04"
 )
 
 var location, _ = time.LoadLocation("Asia/Shanghai")
@@ -27,10 +27,10 @@ func TimeToString(t *time.Time) string {
 		if t.Year() == 1970 {
 			return ""
 		}
-		return t.Format(TIME_LAYOUT)
+		return t.Format(TimeLayout)
 	}
 	// 获取当前时间
-	return time.Now().Format(TIME_LAYOUT)
+	return time.Now().Format(TimeLayout)
 }
 
 // TimeToDateString 2006-01-02
@@ -40,10 +40,10 @@ func TimeToDateString(t *time.Time) string {
 		if t.Year() == 1970 {
 			return ""
 		}
-		return t.Format(DATE_LAYOUT)
+		return t.Format(DateLayout)
 	}
 	// 获取当前时间
-	return time.Now().Format(DATE_LAYOUT)
+	return time.Now().Format(DateLayout)
 }
 
 // DateStringToYmdInt 2006-01-02(string) -> 20060102(int64)
@@ -51,12 +51,12 @@ func DateStringToYmdInt(dt string) int64 {
 	if len(dt) == 0 {
 		return 0
 	}
-	t, err := time.ParseInLocation(DATE_LAYOUT, dt, location)
+	t, err := time.ParseInLocation(DateLayout, dt, location)
 	if err != nil {
 		log.Error(err.Error())
 		return 0
 	}
-	ymd, err2 := strconv.ParseInt(t.Format(YMD_LAYOUT), 10, 64)
+	ymd, err2 := strconv.ParseInt(t.Format(YmdLayout), 10, 64)
 	if err2 != nil {
 		log.Error(err2.Error())
 		return 0
@@ -75,12 +75,12 @@ func YmdIntToDateString(dt int64) string {
 	if dt == 0 {
 		return "-"
 	}
-	t, err := time.ParseInLocation(YMD_LAYOUT, strconv.FormatInt(dt, 10), location)
+	t, err := time.ParseInLocation(YmdLayout, strconv.FormatInt(dt, 10), location)
 	if err != nil {
 		log.Error(err.Error())
 		return "-"
 	}
-	return t.Format(DATE_LAYOUT)
+	return t.Format(DateLayout)
 }
 
 // CurrentMonth 当月起始日期
@@ -88,12 +88,12 @@ func CurrentMonth() (string, string) {
 	loc := time.Now()
 	firstOfMonth := time.Date(loc.Year(), loc.Month(), 1, 0, 0, 0, 0, location)
 	lastOfMonth := firstOfMonth.AddDate(0, 1, -1)
-	return firstOfMonth.Format(YMD_LAYOUT), lastOfMonth.Format(YMD_LAYOUT)
+	return firstOfMonth.Format(YmdLayout), lastOfMonth.Format(YmdLayout)
 }
 
 // CurrentYearMonth 200601
 func CurrentYearMonth() string {
-	return time.Now().Format(YEAR_MONTH_LAYOUT)
+	return time.Now().Format(YearMonthLayout)
 }
 
 // IntToTime
@@ -104,7 +104,7 @@ func IntToTime(ts int64) time.Time {
 
 // TimeStringToTime
 func TimeStringToTime(ts string) time.Time {
-	t, err := time.ParseInLocation(TIME_LAYOUT, ts, location)
+	t, err := time.ParseInLocation(TimeLayout, ts, location)
 	if err != nil {
 		log.Error(err.Error())
 		return time.Now()
@@ -122,7 +122,7 @@ func TimeStringToTime1(ts string, layout string) time.Time {
 }
 
 func DateStringToTime(ts string) time.Time {
-	t, err := time.ParseInLocation(DATE_LAYOUT, ts, location)
+	t, err := time.ParseInLocation(DateLayout, ts, location)
 	if err != nil {
 		log.Error(err.Error())
 		return time.Now()
@@ -166,7 +166,7 @@ func FormatDurationTxt(startTime, endTime int64) string {
 	if startTime == 0 || endTime == 0 {
 		return "不限"
 	}
-	txt := fmt.Sprintf("%s - %s", IntToTime(startTime).Format(DATE_LAYOUT), IntToTime(endTime).Format(DATE_LAYOUT))
+	txt := fmt.Sprintf("%s - %s", IntToTime(startTime).Format(DateLayout), IntToTime(endTime).Format(DateLayout))
 	if strings.TrimSpace(txt) == "" {
 		return "不限"
 	}
@@ -177,7 +177,7 @@ func FormatDurationTxt(startTime, endTime int64) string {
 // 当date为""时：  1=> 01:00、 2=> 02:00、 ... 、 23=>23:00
 // 当date为"2022-11-11"时:   1=> 2022-11-11 01:00、 2=> 2022-11-11 02:00、 ... 、 23=>2022-11-11 23:00
 func Hour2DateTime(date string, hour int) string {
-	hourTime := time.Date(0, 0, 0, hour, 0, 0, 0, location).Format(HOUR_LAYOUT)
+	hourTime := time.Date(0, 0, 0, hour, 0, 0, 0, location).Format(HourLayout)
 	if len(date) > 0 {
 		return date + " " + hourTime
 	}
@@ -189,7 +189,7 @@ func Hour2DateTime(date string, hour int) string {
 // 当date为"2022-11-11"时：  0 => 2022-11-11 00:00 、 1 => 2022-11-11 00:05、 ... 、287 => 2022-11-11 23:55
 func Point2DateTime(date string, point int) string {
 	min := point * 5
-	hourMin := time.Date(0, 0, 0, 0, min, 0, 0, location).Format(MIN_LAYOUT)
+	hourMin := time.Date(0, 0, 0, 0, min, 0, 0, location).Format(MinLayout)
 	if len(date) > 0 {
 		return date + " " + hourMin
 	}
@@ -204,12 +204,12 @@ func Time2Point(date string) int64 {
 
 // DiffDateOfDay 计算两个日期（Ymd）间隔天数
 func DiffDateOfDay(start, end string) float64 {
-	t1, _ := time.Parse(DATE_LAYOUT, start)
-	t2, _ := time.Parse(DATE_LAYOUT, end)
+	t1, _ := time.Parse(DateLayout, start)
+	t2, _ := time.Parse(DateLayout, end)
 	return (t2.Sub(t1).Hours() / 24) + 1
 }
 
-// 距离明天0点的时间（用于缓存自然天）
+// TodayLastTime 距离明天0点的时间（用于缓存自然天）
 func TodayLastTime() time.Duration {
 	loc := time.Now()
 	tomorrow := time.Date(loc.Year(), loc.Month(), loc.Day()+1, 0, 0, 0, 0, location)

@@ -18,8 +18,8 @@ func TestTimeToString(t *testing.T) {
 		args args
 		want string
 	}{
-		{name: "测试正常时间返回", args: args{t: &now}, want: now.Format(TIME_LAYOUT)},
-		{name: "测试正常时间返回", args: args{t: nil}, want: now.Format(TIME_LAYOUT)},
+		{name: "测试正常时间返回", args: args{t: &now}, want: now.Format(TimeLayout)},
+		{name: "测试正常时间返回", args: args{t: nil}, want: now.Format(TimeLayout)},
 		{name: "测试正常时间返回", args: args{t: &year}, want: ""},
 	}
 	for _, tt := range tests {
@@ -36,10 +36,10 @@ func TestDateStringToTime(t *testing.T) {
 	location, err := time.LoadLocation("Asia/Shanghai")
 	assert.NoError(t, err)
 
-	tt, err := time.ParseInLocation(DATE_LAYOUT, "2022-01-01", location)
+	tt, err := time.ParseInLocation(DateLayout, "2022-01-01", location)
 	assert.NoError(t, err)
 	unix := tt.Unix()
-	format := time.Unix(unix, 0).Format(TIME_LAYOUT)
+	format := time.Unix(unix, 0).Format(TimeLayout)
 	assert.Equal(t, "2022-01-01 00:00:00", format)
 	// "2022-01-01" time.Parse 之后的时间戳是  "2022-01-01 08:00:00"
 }

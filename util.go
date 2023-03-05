@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"net/url"
 	"reflect"
 	"strconv"
@@ -174,14 +173,6 @@ func IsOnline(upTime, downTime int64) int64 {
 
 func Join[T comparable](t1 []T, sep string) string {
 	return strings.Join(Map(t1, func(i T) string { return cast.ToString(i) }), sep)
-}
-
-// FormatPercent 格式化百分比 "95.27" -> "95.27%"; "0" -> "-"
-func FormatPercent(v string) string {
-	if len(v) == 0 {
-		return "_"
-	}
-	return fmt.Sprintf("%s%%", v)
 }
 
 // Include 判断是否在切片中存在
