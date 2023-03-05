@@ -20,7 +20,6 @@ const (
 
 var location, _ = time.LoadLocation("Asia/Shanghai")
 
-// TimeToString
 func TimeToString(t *time.Time) string {
 	// 获取指定时间
 	if t != nil {
@@ -96,13 +95,11 @@ func CurrentYearMonth() string {
 	return time.Now().Format(YearMonthLayout)
 }
 
-// IntToTime
 func IntToTime(ts int64) time.Time {
 	a := time.Unix(ts, 0)
 	return a
 }
 
-// TimeStringToTime
 func TimeStringToTime(ts string) time.Time {
 	t, err := time.ParseInLocation(TimeLayout, ts, location)
 	if err != nil {

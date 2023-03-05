@@ -20,8 +20,8 @@ import (
 )
 
 // GetStructName 获取当前函数所依赖名称 业务用于获取领域名称
-func GetStructName(myvar any) string {
-	if t := reflect.TypeOf(myvar); t.Kind() == reflect.Ptr {
+func GetStructName(v any) string {
+	if t := reflect.TypeOf(v); t.Kind() == reflect.Ptr {
 		return t.Elem().Name()
 	} else {
 		return t.Name()
