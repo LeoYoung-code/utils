@@ -3,9 +3,8 @@ module utils
 go 1.18
 
 require (
-	github.com/fatih/structs v1.1.0
 	github.com/go-kratos/kratos/v2 v2.5.4
-	github.com/golang/protobuf v1.5.2
+	github.com/jinzhu/now v1.1.5
 	github.com/json-iterator/go v1.1.12
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
@@ -15,7 +14,6 @@ require (
 	github.com/shopspring/decimal v1.3.1
 	github.com/spf13/cast v1.5.0
 	github.com/stretchr/testify v1.8.2
-	google.golang.org/protobuf v1.28.1
 )
 
 require (

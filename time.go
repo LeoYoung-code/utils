@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/jinzhu/now"
 )
 
 const (
@@ -211,4 +212,14 @@ func TodayLastTime() time.Duration {
 	loc := time.Now()
 	tomorrow := time.Date(loc.Year(), loc.Month(), loc.Day()+1, 0, 0, 0, 0, location)
 	return tomorrow.Sub(loc)
+}
+
+// FormatDuration 格式化时间
+func FormatDuration(startTime, endTime string) (int64, int64) {
+	if startTime == "" || endTime == "" {
+		return 0, 0
+	}
+	s := now.New(DateStringToTime(startTime)).BeginningOfDay().Unix()
+	e := now.New(DateStringToTime(endTime)).EndOfDay().Unix()
+	return s, e
 }
