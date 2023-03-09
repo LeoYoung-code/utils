@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"math/rand"
 	"net/url"
 	"reflect"
 	"strconv"
@@ -197,4 +198,21 @@ func IsUnion[T comparable](arr1 []T, arr2 []T) bool {
 		}
 	}
 	return false
+}
+
+// RandomElement 随机获取切片中的一个元素
+func RandomElement(s []any) any {
+	// 设置 rand 包的 Seed 值
+	rand.Seed(time.Now().UnixNano())
+	index := rand.Intn(len(s))
+	return s[index]
+}
+
+// ToAnySlice 将字符串切片转换为any切片
+func ToAnySlice(s []string) []any {
+	res := make([]any, len(s))
+	for i := range s {
+		res[i] = s[i]
+	}
+	return res
 }

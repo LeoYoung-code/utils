@@ -49,3 +49,27 @@ func TestUrlPath(t *testing.T) {
 		})
 	}
 }
+
+func TestRandomElement(t *testing.T) {
+	type args struct {
+		s []any
+	}
+	tests := []struct {
+		name string
+		args args
+		want any
+	}{
+		{
+			"nil",
+			args{s: []any{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}},
+			3,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			res := RandomElement(tt.args.s)
+			fmt.Printf("%+v", res)
+			// assert.Equalf(t, tt.want, res, "RandomElement(%v)", tt.args.s)
+		})
+	}
+}
