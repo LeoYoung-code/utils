@@ -17,6 +17,7 @@ const (
 	YearMonthLayout = "200601"
 	HourLayout      = "15:04"
 	MinLayout       = "15:04"
+	HOUR_MIN_LAYOUT = "15:04:05"
 )
 
 var location, _ = time.LoadLocation("Asia/Shanghai")
@@ -110,7 +111,7 @@ func TimeStringToTime(ts string) time.Time {
 	return t
 }
 
-func TimeStringToTime1(ts string, layout string) time.Time {
+func TimeString2Time(ts string, layout string) time.Time {
 	t, err := time.ParseInLocation(layout, ts, location)
 	if err != nil {
 		log.Error(err.Error())
