@@ -142,6 +142,7 @@ func FilterEmpty(c []string) []string {
 	return lo.Filter[string](c, func(v string, _ int) bool { return v != "" })
 }
 
+// GenerateUUID 生成uuid
 func GenerateUUID() string {
 	ksIdObj, err := ksuid.NewRandom()
 	if err != nil {
@@ -151,6 +152,7 @@ func GenerateUUID() string {
 	return ksIdObj.String()
 }
 
+// UrlPath 获取url的path
 func UrlPath(rawURL string) string {
 	u, err := url.Parse(rawURL)
 	if err != nil {
