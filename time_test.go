@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -146,6 +147,28 @@ func TestDiffDateOfDay(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, DiffDateOfDay(tt.d1, tt.d2), "DiffDateOfDay(%v, %v)", tt.d1, tt.d2)
+		})
+	}
+}
+
+func TestFormatDuration2Time(t *testing.T) {
+	type args struct {
+		startTime string
+		endTime   string
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  time.Time
+		want1 time.Time
+	}{
+		{"1", args{"2022-11-01", "2022-11-15"}, time.Date(2022, 11, 1, 0, 0, 0, 0, time.Local), time.Date(2022, 11, 2, 0, 0, 0, 0, time.Local)},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, got1 := FormatDuration2Time(tt.args.startTime, tt.args.endTime)
+			fmt.Println(got)
+			fmt.Println(got1)
 		})
 	}
 }
