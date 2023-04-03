@@ -224,3 +224,13 @@ func FormatDuration(startTime, endTime string) (int64, int64) {
 	e := now.New(DateStringToTime(endTime)).EndOfDay().Unix()
 	return s, e
 }
+
+// FormatDuration2Time 格式化时间
+func FormatDuration2Time(startTime, endTime string) (time.Time, time.Time) {
+	if startTime == "" || endTime == "" {
+		return time.Now(), time.Now()
+	}
+	s := now.New(DateStringToTime(startTime)).BeginningOfDay()
+	e := now.New(DateStringToTime(endTime)).EndOfDay()
+	return s, e
+}
