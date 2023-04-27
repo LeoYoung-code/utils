@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// 加密
+// AesEncrypt 加密
 func AesEncrypt(encodeStr string, key string, iv string, process func(crypt []byte) []byte) (string, error) {
 	encodeBytes := []byte(encodeStr)
 	// 根据key 生成密文
@@ -36,7 +36,7 @@ func PKCS5Padding(ciphertext []byte, blockSize int) []byte {
 	return append(ciphertext, padtext...)
 }
 
-// 解密
+// AesDecrypt 解密
 func AesDecrypt(decodeStr string, key []byte, iv string) ([]byte, error) {
 	// 先解密base64
 	decodeBytes, err := base64.StdEncoding.DecodeString(decodeStr)
