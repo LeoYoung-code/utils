@@ -2,8 +2,9 @@ package utils
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetSysVersion(t *testing.T) {
@@ -35,6 +36,13 @@ func TestGetSysVersion(t *testing.T) {
 				versionStr: "",
 			},
 			want: 0,
+		},
+		{
+			name: "test4",
+			args: args{
+				versionStr: "https://gopherize.me/goph",
+			},
+			want: 10,
 		},
 	}
 	for _, tt := range tests {
