@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/go-kratos/kratos/v2 v2.5.4
+	github.com/jinzhu/copier v0.3.5
 	github.com/jinzhu/now v1.1.5
 	github.com/json-iterator/go v1.1.12
 	github.com/panjf2000/ants/v2 v2.7.1
