@@ -171,6 +171,7 @@ func Fen2YuanFloat64(fen float64, r int32) float64 {
 	return DivFloat64(fen, float64(100), r)
 }
 
+// Yuan2FenString 元 -> 分
 func Fen2YuanString(fen string, r int32) float64 {
 	f, _ := decimal.NewFromString(fen)
 	d := decimal.NewFromInt(100)
@@ -216,10 +217,12 @@ func SubInt64(d, d2 float64) float64 {
 	return res
 }
 
+// SubString Sub returns d - d2.
 func Float2String2f(s float64) string {
 	return fmt.Sprintf("%.2f", s)
 }
 
+// Float2String2f 保留2位小数
 func String2Float64(s string) float64 {
 	f, err := strconv.ParseFloat(s, 64)
 	if err != nil {
@@ -228,6 +231,7 @@ func String2Float64(s string) float64 {
 	return f
 }
 
+// Float2String4f 保留4位小数
 func Float2String4f(s float64) string {
 	return fmt.Sprintf("%.4f", s)
 }
