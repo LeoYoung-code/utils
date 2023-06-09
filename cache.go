@@ -10,6 +10,28 @@ import (
 
 var cacheDriver = cache.New(1*time.Minute, 10*time.Minute)
 
+// SetGoCacheWithDeep 写入缓存
+func SetGoCacheWithDeep[T any](key string, val T, exp time.Duration) {
+	marshal, err := json.Marshal(val)
+	if err != nil {
+		log.Error(err)
+	}
+	cacheDriver.Set(key, marshal, exp)
+}
+
+// GetGoCacheWithDeep 只能用指针结构取数据
+func GetGoCacheWithDeep(key string, to any) bool {
+	val, ok := cacheDriver.Get(key)
+	if ok {
+		if err := json.Unmarshal(val.([]byte), to); err == nil {
+			return true
+		} else {
+			log.Error(err)
+		}
+	}
+	return false
+}
+
 // SetGoCache set cache
 func SetGoCache[T any](key string, val T, exp time.Duration) {
 	cacheDriver.Set(key, val, exp)
@@ -38,21 +60,4 @@ func DeepCopy(to, form any) {
 	if err != nil {
 		log.Error(err)
 	}
-}
-
-// SetGoCacheWithDeep 只能传非指针结构
-func SetGoCacheWithDeep[T any](key string, val T, exp time.Duration) {
-	to := new(T)
-	DeepCopy(to, val)
-	cacheDriver.Set(key, to, exp)
-}
-
-// GetGoCacheWithDeep 只能用指针结构取数据
-func GetGoCacheWithDeep(key string, to any) bool {
-	val, ok := cacheDriver.Get(key)
-	if ok {
-		DeepCopy(to, val)
-		return true
-	}
-	return false
 }
