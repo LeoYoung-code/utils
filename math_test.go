@@ -114,3 +114,73 @@ func TestDivPerString(t *testing.T) {
 		})
 	}
 }
+
+func TestFloat2String4f(t *testing.T) {
+	type args struct {
+		s float64
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "test-1",
+			args: args{s: 0.00000000000},
+			want: "0.0000",
+		},
+		{
+			name: "test-2",
+			args: args{s: 0.00000000001},
+			want: "0.0000",
+		},
+		{
+			name: "test-3",
+			args: args{s: 0},
+			want: "0.0000",
+		},
+		{
+			name: "test-4",
+			args: args{s: 0.00003000003},
+			want: "0.0000",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, Float2String4f(tt.args.s), "Float2String4f(%v)", tt.args.s)
+		})
+	}
+}
+
+func TestFloat64Round(t *testing.T) {
+	type args struct {
+		f float64
+		r int32
+	}
+	tests := []struct {
+		name string
+		args args
+		want float64
+	}{
+		{
+			name: "test-1",
+			args: args{f: 0.000500, r: 4},
+			want: 0.0005,
+		},
+		{
+			name: "test-2",
+			args: args{f: 0.00000000001, r: 2},
+			want: 0.00,
+		},
+		{
+			name: "test-3",
+			args: args{f: 0, r: 4},
+			want: 0.0000,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, Float64Round(tt.args.f, tt.args.r), "Float64Round(%v, %v)", tt.args.f, tt.args.r)
+		})
+	}
+}
