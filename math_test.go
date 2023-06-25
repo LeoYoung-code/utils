@@ -184,3 +184,69 @@ func TestFloat64Round(t *testing.T) {
 		})
 	}
 }
+
+func TestFen2YuanFloat64(t *testing.T) {
+	type args struct {
+		fen float64
+		r   int32
+	}
+	tests := []struct {
+		name string
+		args args
+		want float64
+	}{
+		{
+			name: "test-1",
+			args: args{fen: 100, r: 2},
+			want: 1,
+		},
+		{
+			name: "test-2",
+			args: args{fen: 0, r: 2},
+			want: 0,
+		},
+		{
+			name: "test-3",
+			args: args{fen: 175, r: 4},
+			want: 1.75,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, Fen2YuanFloat64(tt.args.fen, tt.args.r), "Fen2YuanFloat64(%v, %v)", tt.args.fen, tt.args.r)
+		})
+	}
+}
+
+func TestYuan2FenFloat64(t *testing.T) {
+	type args struct {
+		yuan float64
+		r    int32
+	}
+	tests := []struct {
+		name string
+		args args
+		want float64
+	}{
+		{
+			name: "test-1",
+			args: args{yuan: 1, r: 2},
+			want: 100,
+		},
+		{
+			name: "test-2",
+			args: args{yuan: 0, r: 2},
+			want: 0,
+		},
+		{
+			name: "test-3",
+			args: args{yuan: 1.75, r: 4},
+			want: 175,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, Yuan2FenFloat64(tt.args.yuan, tt.args.r), "Yuan2FenFloat64(%v, %v)", tt.args.yuan, tt.args.r)
+		})
+	}
+}
