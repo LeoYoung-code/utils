@@ -1,8 +1,9 @@
-package utils
+package cache
 
 import (
-	json "github.com/json-iterator/go"
 	"time"
+
+	json "github.com/json-iterator/go"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/jinzhu/copier"

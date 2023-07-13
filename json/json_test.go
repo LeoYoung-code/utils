@@ -1,8 +1,9 @@
-package utils
+package json
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestObj2String(t *testing.T) {
