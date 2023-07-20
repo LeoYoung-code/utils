@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"codeup.aliyun.com/qimao/leo/lib/log"
 	"github.com/getsentry/sentry-go"
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/pkg/errors"
 	"golang.org/x/sync/errgroup"
 )
