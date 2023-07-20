@@ -5,8 +5,6 @@ import (
 	"strconv"
 )
 
-// 版本转换 61610 -> 6.16.10
-// 对外版本，iOS第三位为0时不展示，尾部不展示
 func Num2Version(innerVersion string) (outVersion string) {
 	innr, err := strconv.Atoi(innerVersion)
 	if err != nil {
