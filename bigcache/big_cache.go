@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"codeup.aliyun.com/qimao/golaxy/toolkit/log"
-	`codeup.aliyun.com/qimao/golaxy/toolkit/pkg/env`
+	"codeup.aliyun.com/qimao/leo/lib/pkg/env"
 	"github.com/allegro/bigcache/v3"
 	"github.com/bytedance/sonic"
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 var config = bigcache.Config{
