@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"codeup.aliyun.com/qimao/leo/lib/pkg/env"
 	"github.com/allegro/bigcache/v3"
 	"github.com/bytedance/sonic"
 	"github.com/go-kratos/kratos/v2/log"
@@ -49,10 +48,6 @@ var config = bigcache.Config{
 }
 
 func NewCache(ctx context.Context) *bigcache.BigCache {
-	if !env.IsReleasing() {
-		// 开发、测试环境打开日志
-		config.Verbose = true
-	}
 	cache, err := bigcache.New(ctx, config)
 	if err != nil {
 		log.Fatal("bigCache 初始化失败", err)
