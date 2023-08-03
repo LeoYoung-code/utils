@@ -1,8 +1,9 @@
-package utils
+package common
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetSum32(t *testing.T) {
