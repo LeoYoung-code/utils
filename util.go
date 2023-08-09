@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"math/rand"
 	"net/url"
 	"reflect"
@@ -217,4 +219,22 @@ func ToAnySlice(s []string) []any {
 		res[i] = s[i]
 	}
 	return res
+}
+
+// Md5Parser md5解析
+func Md5Parser(value string) int64 {
+	// 计算md5
+	hash := md5.Sum([]byte(value))
+	md5Str := hex.EncodeToString(hash[:])
+
+	// 取前5位转换成int
+	prefix := md5Str[:5]
+	i, err := strconv.ParseInt(prefix, 16, 32)
+	if err != nil {
+		return 0
+	}
+	i++
+
+	// 取模
+	return i % 40960
 }

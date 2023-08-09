@@ -73,3 +73,30 @@ func TestRandomElement(t *testing.T) {
 		})
 	}
 }
+
+func TestMd5Parser(t *testing.T) {
+	type args struct {
+		value string
+	}
+	tests := []struct {
+		name string
+		args args
+		want int64
+	}{
+		{
+			name: "test1",
+			args: args{value: "#21CCC916-6811-43B6-9D88-8176F1CBC820"},
+			want: 10663,
+		},
+		{
+			name: "test2",
+			args: args{value: "#1166F695-2507-4D25-BF15-1186B8FEF99D"},
+			want: 10758,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, Md5Parser(tt.args.value), "Md5Parser(%v)", tt.args.value)
+		})
+	}
+}
