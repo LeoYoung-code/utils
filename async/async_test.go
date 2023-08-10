@@ -14,7 +14,7 @@ import (
 
 func TestRecoverGO(t *testing.T) {
 	if err := sentry.Init(sentry.ClientOptions{
-		Dsn:        "https://50e55437f5774080a6eac8cc4a8edfc8@sentry.qimao.com/3",
+		Dsn:        "https://50e55437f5774080a6eac8cc4a8edfc8@/3",
 		SampleRate: 1.0,
 	}); err != nil {
 		log.Infof("Sentry initialization failed: %v\n", err)
@@ -58,7 +58,7 @@ func TestRecoverGO(t *testing.T) {
 
 func TestRecoverWrap(t *testing.T) {
 	if err := sentry.Init(sentry.ClientOptions{
-		Dsn:        "https://50e55437f5774080a6eac8cc4a8edfc8@sentry.qimao.com/3",
+		Dsn:        "https://50e55437f5774080a6eac8cc4a8edfc8/3",
 		SampleRate: 1.0,
 	}); err != nil {
 		log.Infof("Sentry initialization failed: %v\n", err)
