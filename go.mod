@@ -3,7 +3,6 @@ module utils
 go 1.18
 
 require (
-	codeup.aliyun.com/qimao/leo/lib v0.0.0-20230707005510-2ca644e8f69f
 	github.com/allegro/bigcache/v3 v3.1.0
 	github.com/bytedance/sonic v1.9.1
 	github.com/getsentry/sentry-go v0.22.0
