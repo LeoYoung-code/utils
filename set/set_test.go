@@ -1,4 +1,4 @@
-package utils
+package set
 
 import (
 	"fmt"
@@ -13,10 +13,10 @@ func TestSetStruct_Add(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		s    SetStruct
+		s    MapSet
 		args args
 	}{
-		{"test1", SetStruct{
+		{"test1", MapSet{
 			"a": {},
 			"b": {},
 			"c": {},
@@ -36,10 +36,10 @@ func TestSetStruct_Delete(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		s    SetStruct
+		s    MapSet
 		args args
 	}{
-		{"test1", SetStruct{
+		{"test1", MapSet{
 			"a": {},
 			"b": {},
 			"c": {},
@@ -59,11 +59,11 @@ func TestSetStruct_Has(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		s    SetStruct
+		s    MapSet
 		args args
 		want bool
 	}{
-		{"test1", SetStruct{
+		{"test1", MapSet{
 			"a": {},
 			"b": {},
 			"c": {},
