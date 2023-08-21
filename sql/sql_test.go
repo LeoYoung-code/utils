@@ -1,4 +1,4 @@
-package utils
+package sql
 
 import (
 	"testing"
@@ -16,8 +16,8 @@ func Test_sqlInSliceInt64(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SqlInSliceInt64(tt.opt, tt.field, tt.s); got != tt.want {
-				t.Errorf("SqlInSliceInt64() = %v, want %v", got, tt.want)
+			if got := InSliceInt64(tt.opt, tt.field, tt.s); got != tt.want {
+				t.Errorf("InSliceInt64() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -35,8 +35,8 @@ func Test_sqlInSliceString(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SqlInSliceString(tt.opt, tt.field, tt.s); got != tt.want {
-				t.Errorf("SqlInSliceInt64() = %v, want %v", got, tt.want)
+			if got := InSliceString(tt.opt, tt.field, tt.s); got != tt.want {
+				t.Errorf("InSliceInt64() = %v, want %v", got, tt.want)
 			}
 		})
 	}
