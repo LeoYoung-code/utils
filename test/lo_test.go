@@ -5,7 +5,9 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/samber/lo"
 	lop "github.com/samber/lo/parallel"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTimes(t *testing.T) {
@@ -33,4 +35,36 @@ func TestPartitionBy(t *testing.T) {
 		return "odd"
 	})
 	fmt.Println(partitions)
+}
+
+func TestReplace(t *testing.T) {
+	in := []int{0, 1, 0, 1, 2, 3, 0}
+
+	s1 := lo.Replace(in, 0, 42, 1)
+	// []int{42dd, 1, 0, 1, 2, 3, 0}
+	assert.Equal(t, []int{42, 1, 0, 1, 2, 3, 0}, s1)
+
+	s2 := lo.Replace(in, -1, 42, 1)
+	// []int{0, 1, 0, 1, 2, 3, 0}
+	assert.Equal(t, []int{0, 1, 0, 1, 2, 3, 0}, s2)
+
+	s3 := lo.Replace(in, 0, 42, 2)
+	// []int{42, 1, 42, 1, 2, 3, 0}
+	assert.Equal(t, []int{42, 1, 42, 1, 2, 3, 0}, s3)
+
+	s4 := lo.Replace(in, 0, 42, -1)
+	// []int{42, 1, 42, 1, 2, 3, 42}
+	assert.Equal(t, []int{42, 1, 42, 1, 2, 3, 42}, s4)
+}
+
+func TestCompact(t *testing.T) {
+	in := []string{"", "foo", "", "bar", ""}
+	s1 := lo.Compact[string](in)
+	// []string{"foo", "bar"}
+	assert.Equal(t, []string{"foo", "bar"}, s1)
+
+	in2 := []int{0, 1, 0, 1, 2, 3, 0}
+	s2 := lo.Compact[int](in2)
+	// []int{1, 1, 2, 3}
+	assert.Equal(t, []int{1, 1, 2, 3}, s2)
 }
