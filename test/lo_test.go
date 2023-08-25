@@ -68,3 +68,11 @@ func TestCompact(t *testing.T) {
 	// []int{1, 1, 2, 3}
 	assert.Equal(t, []int{1, 1, 2, 3}, s2)
 }
+
+func TestMapKeys(t *testing.T) {
+	m := lo.MapKeys(map[int]int{1: 1, 2: 2, 3: 3, 4: 4}, func(_ int, v int) string {
+		return strconv.FormatInt(int64(v)*100, 10)
+	})
+	assert.Equal(t, map[string]int{"100": 1, "200": 2, "300": 3, "400": 4}, m)
+	// map[string]int{"1": 1, "2": 2, "3": 3, "4": 4}
+}
