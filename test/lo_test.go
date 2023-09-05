@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"testing"
+	"time"
 
 	"github.com/samber/lo"
 	lop "github.com/samber/lo/parallel"
@@ -75,4 +76,35 @@ func TestMapKeys(t *testing.T) {
 	})
 	assert.Equal(t, map[string]int{"100": 1, "200": 2, "300": 3, "400": 4}, m)
 	// map[string]int{"1": 1, "2": 2, "3": 3, "4": 4}
+}
+
+func TestDebounce(t *testing.T) {
+	debounce, cancel := lo.NewDebounce(time.Millisecond, func() {
+		println("called once")
+	})
+
+	debounce()
+	debounce()
+	debounce()
+	debounce()
+	debounce()
+
+	time.Sleep(100 * time.Millisecond)
+
+	cancel()
+}
+
+// ' NewDebounce '创建一个去绑定实例，延迟调用给定的函数，直到等待毫秒后执行，直到' cancel '被调用。
+func TestDebounce1(t *testing.T) {
+	f := func() {
+		println("Called once after 100ms when debounce stopped invoking!")
+	}
+
+	debounce, cancel := lo.NewDebounce(100*time.Millisecond, f)
+	for j := 0; j < 20; j++ {
+		debounce()
+	}
+
+	time.Sleep(20 * time.Second)
+	cancel()
 }
