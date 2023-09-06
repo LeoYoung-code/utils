@@ -83,3 +83,22 @@ func Test_SliceIntersect_int(t *testing.T) {
 		})
 	}
 }
+
+func TestMapFormat(t *testing.T) {
+	type args struct {
+		arr []int
+		f   func(T1 int, T2 ...any) int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, MapFormat(tt.args.arr, tt.args.f), "MapFormat(%v, %v)", tt.args.arr, tt.args.f)
+		})
+	}
+}
