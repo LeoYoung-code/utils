@@ -26,11 +26,11 @@ type TransactionUtil interface {
 }
 
 type (
-	MysqlClient xorm.EngineInterface
+	mysqlClient xorm.EngineInterface
 )
 
 type transactionImpl struct {
-	mysqlClient MysqlClient // 这里的mysqlClient是一个接口，里面有一个NewSession()方法，返回一个*xorm.Session
+	mysqlClient mysqlClient // 这里的mysqlClient是一个接口，里面有一个NewSession()方法，返回一个*xorm.Session
 }
 
 func (t *transactionImpl) Transaction(ctx context.Context, fc func(ctx context.Context) error) (err error) {
