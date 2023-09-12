@@ -110,7 +110,13 @@ func TestByteToString(t *testing.T) {
 		args args
 		want string
 	}{
-		// TODO: Add test cases.
+		{
+			name: "test1",
+			args: args{
+				data: []byte("dasdasda"),
+			},
+			want: "dasdasda",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
