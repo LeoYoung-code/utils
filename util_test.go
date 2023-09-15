@@ -117,6 +117,20 @@ func TestByteToString(t *testing.T) {
 			},
 			want: "dasdasda",
 		},
+		{
+			name: "test2",
+			args: args{
+				data: []byte("123123"),
+			},
+			want: "123123",
+		},
+		{
+			name: "test3",
+			args: args{
+				data: []byte("%%#$^#$##**"),
+			},
+			want: "%%#$^#$##**",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
