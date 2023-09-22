@@ -172,3 +172,23 @@ func TestFormatDuration2Time(t *testing.T) {
 		})
 	}
 }
+
+func TestIsNowTimeIn(t *testing.T) {
+	type args struct {
+		startTime int64
+		endTime   int64
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{name: "测试正常时间返回", args: args{startTime: time.Now().Unix() - 300, endTime: time.Now().Unix() + 300}, want: true},
+		{name: "测试异常时间返回", args: args{startTime: time.Now().Unix() + 300, endTime: time.Now().Unix() + 600}, want: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, IsNowTimeIn(tt.args.startTime, tt.args.endTime), "IsNowTimeIn(%v, %v)", tt.args.startTime, tt.args.endTime)
+		})
+	}
+}

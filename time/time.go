@@ -234,3 +234,19 @@ func FormatDuration2Time(startTime, endTime string) (time.Time, time.Time) {
 	e := now.New(DateStringToTime(endTime)).EndOfDay()
 	return s, e
 }
+
+// IsNowTimeIn 现在的时候是否在 某个时间段内
+func IsNowTimeIn(startTime, endTime int64) bool {
+	if endTime == 0 {
+		return true
+	}
+	now := time.Now().Unix()
+	if endTime > 0 && now > endTime {
+		return false
+	}
+
+	if startTime > 0 && now < startTime {
+		return false
+	}
+	return true
+}
