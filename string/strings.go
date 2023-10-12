@@ -2,9 +2,11 @@ package string
 
 import (
 	"go/token"
+	"reflect"
 	"strings"
 	"unicode"
 	"unicode/utf8"
+	"unsafe"
 )
 
 func UcFirst(str string) string {
@@ -47,4 +49,38 @@ func GoSanitized(s string) string {
 		return "_" + s
 	}
 	return s
+}
+
+func b2s(b []byte) string {
+	if len(b) == 0 {
+		return ""
+	}
+	return *(*string)(unsafe.Pointer(&b))
+}
+
+// b2s_new.go
+func s2b(s string) (b []byte) {
+	if len(s) == 0 {
+		return nil
+	}
+	bh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sh := (*reflect.StringHeader)(unsafe.Pointer(&s))
+	bh.Data = sh.Data
+	bh.Cap = sh.Len
+	bh.Len = sh.Len
+	return b
+}
+
+func StringToBytes(s string) []byte {
+	if len(s) == 0 {
+		return nil
+	}
+	return unsafe.Slice(unsafe.StringData(s), len(s))
+}
+
+func BytesToString(b []byte) string {
+	if len(b) == 0 {
+		return ""
+	}
+	return unsafe.String(&b[0], len(b))
 }

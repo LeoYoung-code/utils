@@ -1,6 +1,7 @@
 package string
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -99,6 +100,166 @@ func TestUcFirst(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := UcFirst(tt.args.str); got != tt.want {
 				t.Errorf("UcFirst() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_b2s(t *testing.T) {
+	type args struct {
+		b []byte
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "1",
+			args: args{
+				b: []byte("hello world"),
+			},
+			want: "hello world",
+		},
+		{
+			name: "2",
+			args: args{
+				b: []byte(""),
+			},
+			want: "",
+		},
+		{
+			name: "3",
+			args: args{
+				b: []byte("🏷"),
+			},
+			want: "🏷",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := b2s(tt.args.b); got != tt.want {
+				t.Errorf("b2s() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_s2b(t *testing.T) {
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []byte
+	}{
+		{
+			name: "1",
+			args: args{
+				s: "hello world",
+			},
+			want: []byte("hello world"),
+		},
+		{
+			name: "2",
+			args: args{
+				s: "",
+			},
+			want: nil,
+		},
+		{
+			name: "3",
+			args: args{
+				s: "🏷",
+			},
+			want: []byte("🏷"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotB := s2b(tt.args.s); !reflect.DeepEqual(gotB, tt.want) {
+				t.Errorf("s2b() = %v, want %v", gotB, tt.want)
+			}
+		})
+	}
+}
+
+func TestBytesToString(t *testing.T) {
+	type args struct {
+		b []byte
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "1",
+			args: args{
+				b: []byte("hello world"),
+			},
+			want: "hello world",
+		},
+		{
+			name: "2",
+			args: args{
+				b: []byte(""),
+			},
+			want: "",
+		},
+		{
+			name: "3",
+			args: args{
+				b: []byte("🏷"),
+			},
+			want: "🏷",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := BytesToString(tt.args.b); got != tt.want {
+				t.Errorf("BytesToString() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestStringToBytes(t *testing.T) {
+	type args struct {
+		s string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []byte
+	}{
+		{
+			name: "1",
+			args: args{
+				s: "hello world",
+			},
+			want: []byte("hello world"),
+		},
+		{
+			name: "2",
+			args: args{
+				s: "",
+			},
+			want: nil,
+		},
+		{
+			name: "3",
+			args: args{
+				s: "🏷",
+			},
+			want: []byte("🏷"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := StringToBytes(tt.args.s); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("StringToBytes() = %v, want %v", got, tt.want)
 			}
 		})
 	}
