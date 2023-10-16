@@ -6,13 +6,13 @@ import (
 	"time"
 )
 
-type Foo struct {
+type foo struct {
 }
 
 var once sync.Once
-var instance *Foo
+var instance *foo
 
-func getInstance(id int) *Foo {
+func getInstance(id int) *foo {
 	defer func() {
 		if e := recover(); e != nil {
 			log.Printf("goroutine-%d: caught a panic: %s", id, e)
@@ -20,7 +20,7 @@ func getInstance(id int) *Foo {
 	}()
 	log.Printf("goroutine-%d: enter GetInstance\n", id)
 	once.Do(func() {
-		instance = &Foo{}
+		instance = &foo{}
 		time.Sleep(3 * time.Second)
 		log.Printf("goroutine-%d: the addr of instance is %p\n", id, instance)
 		panic("panic in once.Do function")
