@@ -28,6 +28,14 @@ func getInstance(id int) *foo {
 	return instance
 }
 
+/*
+*
+onceDo会等待f执行完毕后才返回，这期间其他执行once。Do函数的goroutine（如上面运行结果中的goroutine 2~5)将会阻塞等待；
+
+Do函数返回后，后续的goroutine再执行Do函数将不再执行f并立即返回（如上面运行结果中的goroutine0）；
+
+即便在函数f中出现panic，sync。Once原语也会认为once。Do 执行完毕，后续对once。Do的调用将不再执行f。
+*/
 func testOnes() {
 	var wg sync.WaitGroup
 	for i := 0; i < 5; i++ {
