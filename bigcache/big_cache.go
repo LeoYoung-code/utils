@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/allegro/bigcache/v3"
-	"github.com/bytedance/sonic"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -57,31 +56,21 @@ func NewCache(ctx context.Context) *bigcache.BigCache {
 
 var cacheDriver = NewCache(context.Background())
 
-// SetGoCacheWithDeep 写 cache
-func SetGoCacheWithDeep[T any](key string, val T) {
-	marshal, err := sonic.Marshal(val)
-	if err != nil {
-		log.Error("序列化报错 key：", key, " 错误： ", err)
-	}
-	err = cacheDriver.Set(key, marshal)
-	if err != nil {
-		log.Error("Set报错 key：", key, " 错误： ", err)
-	}
-}
-
-// GetGoCacheWithDeep 只能用指针结构取数据
-func GetGoCacheWithDeep(key string, to any) bool {
-	val, err := cacheDriver.Get(key)
+// GetGoCache 只获取是否存在缓存的状态
+func GetGoCache(key string) bool {
+	_, err := cacheDriver.Get(key)
 	if err != nil {
 		if err != bigcache.ErrEntryNotFound {
 			log.Error("Get报错 key：", key, " 错误： ", err)
 		}
 		return false
 	}
-	err = sonic.Unmarshal(val, to)
-	if err != nil {
-		log.Error("反序列报错 key：", key, " 错误： ", err)
-		return false
-	}
 	return true
+}
+
+func SetGoCache(key string, val []byte) {
+	err := cacheDriver.Set(key, val)
+	if err != nil {
+		log.Error("Set报错 key：", key, " 错误： ", err)
+	}
 }

@@ -34,6 +34,7 @@ func readSyncByRWMutex() int64 {
 }
 
 func BenchmarkAddSyncByAtomic(b *testing.B) {
+	// runtime.GOMAXPROCS(2)
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
 			addSyncByAtomic(1)
