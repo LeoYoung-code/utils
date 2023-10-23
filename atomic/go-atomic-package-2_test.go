@@ -6,6 +6,12 @@ import (
 	"testing"
 )
 
+/**
+利用原子操作的无锁并发写的性能随着并发量的增大而小幅下降；
+
+利用原子操作的无锁并发读的性能随着并发量增大有持续提升的趋势，并且性能约为读锁的100倍。
+*/
+
 type Config struct {
 	sync.RWMutex
 	data string
