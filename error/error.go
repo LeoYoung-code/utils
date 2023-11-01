@@ -2,13 +2,39 @@ package errorTest
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/pkg/errors"
 )
 
-const basePath = "/Users/staff/project"
+var basePath string
+
+func init() {
+	fullPath, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	// 分割路径
+	parts := strings.Split(fullPath, "/")
+
+	// 关键字
+	key := "project"
+	// 重新组合路径直到关键字
+	basePath = "/"
+	for _, part := range parts {
+		if part == "" {
+			continue
+		}
+		basePath = basePath + part
+		if part == key {
+			break
+		}
+		basePath = basePath + "/"
+	}
+}
 
 func NewError(err error) error {
 	_, file, line, _ := runtime.Caller(1)
