@@ -23,11 +23,11 @@ func TestNewError(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := NewError(tt.args.err)
+			err := errLine(tt.args.err)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("NewError() error = %v, wantErr %v", err, tt.wantErr)
 			}
-			t.Error(err)
+			t.Log("错误信息:", err)
 		})
 	}
 }

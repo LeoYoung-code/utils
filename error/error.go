@@ -36,7 +36,7 @@ func init() {
 	}
 }
 
-func NewError(err error) error {
+func errLine(err error) error {
 	_, file, line, _ := runtime.Caller(1)
 	relFile, err2 := filepath.Rel(basePath, file)
 	if err2 != nil {
