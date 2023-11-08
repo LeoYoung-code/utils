@@ -7,7 +7,8 @@
     包含一些泛型函数,以及时间等功能函数。
     包含一些代码测试
 
-## 2.其他
+## 2.靠谱包整理
+   * OneAPI https://github.com/songquanpeng/one-api
 
 ## 3.使用
 ```go
