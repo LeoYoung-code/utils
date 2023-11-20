@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# 检查是否提供了 URL
+if [ "$#" -ne 1 ]; then
+    echo "没有输入Url Usage: \$0 <url>"
+    exit 1
+fi
+
+# 获取 URL
+URL=$1
+echo $URL+"请求详细数据curl1"
+curl -w '从请求开始到域名解析完成的耗时=%{time_namelookup}秒 \n
+从请求开始到TCP三次握手完成耗时=%{time_connect}秒\n
+从请求开始到TLS握手完成的耗时=%{time_appconnect}秒\n
+重定向时间=%{time_redirect}秒\n
+从请求开始到向服务器发送第一个请求开始之前的耗时=%{time_pretransfer}秒\n
+从请求开始到内容传输前的时间=%{time_starttransfer}秒\n
+总耗时=%{time_total}秒\n' -o /dev/null -s "$URL"
+
+
+echo $URL+"请求详细数据curl2"
+# 发送请求并获取时间指标
+output=$(curl  -w "
+ time_namelookup=%{time_namelookup}\
+ time_connect=%{time_connect}\
+ time_appconnect=%{time_appconnect}\
+ time_pretransfer=%{time_pretransfer}\
+ time_starttransfer=%{time_starttransfer}\
+ time_redirect=%{time_redirect}\
+ time_total=%{time_total}" -o /dev/null -s "$URL")
+
+
+# 读取时间指标到变量
+time_namelookup=$(echo $output | awk '{print $1}' | cut -d= -f2)
+time_connect=$(echo $output | awk '{print $2}' | cut -d= -f2)
+time_appconnect=$(echo $output | awk '{print $3}' | cut -d= -f2)
+time_pretransfer=$(echo $output | awk '{print $4}' | cut -d= -f2)
+time_starttransfer=$(echo $output | awk '{print $5}' | cut -d= -f2)
+time_redirect=$(echo $output | awk '{print $6}' | cut -d= -f2)
+time_total=$(echo $output | awk '{print $7}' | cut -d= -f2)
+
+# 打印结果
+echo "=================请求详细数据======================"
+
+echo "从请求开始到域名解析完成的耗时 = $time_namelookup 秒"
+echo "从请求开始到TCP三次握手完成耗时 = $time_connect 秒"
+echo "从请求开始到TLS握手完成的耗时 = $time_appconnect 秒"
+echo "从请求开始到向服务器发送第一个请求开始之前的耗时 = $time_pretransfer 秒"
+echo "重定向时间，包括到内容传输前的重定向的 DNS 解析、TCP 连接、内容传输等时间 = $time_redirect 秒"
+echo "从请求开始到内容传输前的时间 = $time_starttransfer 秒"
+echo "总耗时 = $time_total 秒"
+
+# 计算时间差值并格式化输出
+tcp_handshake_time=$(echo | awk "{printf \"%.6f\", $time_connect - $time_namelookup}")
+ssl_time=$(echo | awk "{printf \"%.6f\", $time_appconnect - $time_connect}")
+server_processing_time=$(echo | awk "{printf \"%.6f\", $time_starttransfer - $time_pretransfer}")
+ttfb=$(echo | awk "{printf \"%.6f\", $time_starttransfer - $time_appconnect}")
+
+
+
+# 打印结果
+echo "================ 耗时分析========================"
+
+echo "域名解析耗时 = $time_namelookup 秒"
+echo "TCP 握手耗时 = $tcp_handshake_time 秒"
+echo "SSL 耗时 = $ssl_time 秒"
+echo "服务器处理请求耗时 = $server_processing_time 秒"
+echo "TTFB = $ttfb 秒"
+echo "总耗时 = $time_total 秒"
+
+
