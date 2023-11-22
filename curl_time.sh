@@ -29,6 +29,8 @@ output=$(curl  -w "
  time_redirect=%{time_redirect}\
  time_total=%{time_total}" -o /dev/null -s "$URL")
 
+echo "======================== 原始数据 ============================"
+echo $output
 
 # 读取时间指标到变量
 time_namelookup=$(echo $output | awk '{print $1}' | cut -d= -f2)
