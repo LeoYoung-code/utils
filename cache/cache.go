@@ -3,7 +3,7 @@ package cache
 import (
 	"time"
 
-	json "github.com/json-iterator/go"
+	json "github.com/bytedance/sonic"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/jinzhu/copier"

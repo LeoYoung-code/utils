@@ -19,7 +19,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/samber/lo"
 
-	json "github.com/json-iterator/go"
+	json "github.com/bytedance/sonic"
 )
 
 // GetStructName 获取当前函数所依赖名称 业务用于获取领域名称
