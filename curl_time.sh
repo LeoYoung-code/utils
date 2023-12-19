@@ -31,6 +31,7 @@ output=$(curl  -w "
 
 echo "======================== 原始数据 ============================"
 echo $output
+echo "======================== 原始数据 end ============================"
 
 # 读取时间指标到变量
 time_namelookup=$(echo $output | awk '{print $1}' | cut -d= -f2)
@@ -52,6 +53,9 @@ echo "重定向时间，包括到内容传输前的重定向的 DNS 解析、TCP
 echo "从请求开始到内容传输前的时间 = $time_starttransfer 秒"
 echo "总耗时 = $time_total 秒"
 
+echo "=================请求详细数据 end ======================"
+
+
 # 计算时间差值并格式化输出
 tcp_handshake_time=$(echo | awk "{printf \"%.6f\", $time_connect - $time_namelookup}")
 ssl_time=$(echo | awk "{printf \"%.6f\", $time_appconnect - $time_connect}")
@@ -66,7 +70,7 @@ server_processing_time_rate=$(echo "scale=4; ($server_processing_time/$time_tota
 ttfb_rate=$(echo "scale=4; ($ttfb/$time_total)*100" | bc)
 
 # 打印结果
-echo "================ 耗时分析========================"
+echo "================ 耗时分析 ========================"
 
 printf "域名解析耗时 = %.6f 秒 ,占比 %.2f%%\n " "$time_namelookup" "$time_namelookup_rate"
 printf "TCP 握手耗时 = %.6f 秒 ,占比 %.2f%%\n " "$tcp_handshake_time" "$tcp_handshake_time_rate"
@@ -75,4 +79,5 @@ printf "服务器处理请求耗时 = %.6f 秒 ,占比 %.2f%%\n " "$server_proce
 printf "TTFB = %.6f 秒 ,占比 %.2f%%\n " "$ttfb" "$ttfb_rate"
 echo "总耗时 = $time_total 秒"
 
+echo "================ 耗时分析 end ========================"
 
