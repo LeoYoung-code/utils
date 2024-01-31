@@ -54,7 +54,27 @@ func TestCompressBytes(t *testing.T) {
 		args args
 		want []byte
 	}{
-		// TODO: Add test cases.
+		{
+			name: "测试正常时间返回",
+			args: args{
+				s: []byte("123456"),
+			},
+			want: []byte{0x5, 0x31, 0x32, 0x33, 0x34, 0x35, 0x1, 0x36},
+		},
+		{
+			name: "测试空字符串",
+			args: args{
+				s: []byte(""),
+			},
+			want: []byte(""),
+		},
+		{
+			name: "测试异常字符串",
+			args: args{
+				s: []byte("💵💵💵💵"),
+			},
+			want: []byte{0x5, 0xf0, 0x9f, 0x92, 0xb5, 0xf0, 0x5, 0x9f, 0x92, 0xb5, 0xf0, 0x9f, 0x5, 0x92, 0xb5, 0xf0, 0x9f, 0x92, 0x1, 0xb5},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -73,7 +93,30 @@ func TestDecompress(t *testing.T) {
 		want    string
 		wantErr assert.ErrorAssertionFunc
 	}{
-		// TODO: Add test cases.
+		{
+			name: "测试正常时间返回",
+			args: args{
+				c: []byte{0x5, 0x31, 0x32, 0x33, 0x34, 0x35, 0x1, 0x36},
+			},
+			want:    "123456",
+			wantErr: assert.NoError,
+		},
+		{
+			name: "测试空字符串",
+			args: args{
+				c: []byte(""),
+			},
+			want:    "",
+			wantErr: assert.NoError,
+		},
+		{
+			name: "测试异常字符串",
+			args: args{
+				c: []byte{0x5, 0xf0, 0x9f, 0x92, 0xb5, 0xf0, 0x5, 0x9f, 0x92, 0xb5, 0xf0, 0x9f, 0x5, 0x92, 0xb5, 0xf0, 0x9f, 0x92, 0x1, 0xb5},
+			},
+			want:    "💵💵💵💵",
+			wantErr: assert.NoError,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
