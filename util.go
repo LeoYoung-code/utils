@@ -238,3 +238,16 @@ func Md5Parser(value string) int64 {
 	// 取模
 	return i % 40960
 }
+
+// S2Int64Slice string2Int64Slice 抛弃字符串
+func S2Int64Slice(s []string) []int64 {
+	intSlice := make([]int64, 0, len(s))
+	for _, v := range s {
+		r, err := cast.ToInt64E(v)
+		if err != nil {
+			continue
+		}
+		intSlice = append(intSlice, r)
+	}
+	return Set(intSlice)
+}
