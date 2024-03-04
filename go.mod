@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/allegro/bigcache/v3 v3.1.0
-	github.com/bytedance/sonic v1.11.0
+	github.com/bytedance/sonic v1.11.2
 	github.com/getsentry/sentry-go v0.23.0
 	github.com/go-kratos/kratos/v2 v2.7.0
 	github.com/jinzhu/copier v0.3.5
