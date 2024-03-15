@@ -7,6 +7,8 @@ import (
 	"unicode"
 	"unicode/utf8"
 	"unsafe"
+
+	"github.com/samber/lo"
 )
 
 func UcFirst(str string) string {
@@ -83,4 +85,9 @@ func BytesToString(b []byte) string {
 		return ""
 	}
 	return unsafe.String(&b[0], len(b))
+}
+
+func generateRandStr(length int) string {
+	letters := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	return lo.RandomString(length, []rune(letters))
 }
