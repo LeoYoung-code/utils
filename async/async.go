@@ -3,7 +3,7 @@ package async
 import (
 	"context"
 
-	`github.com/getsentry/sentry-go`
+	"github.com/getsentry/sentry-go"
 )
 
 func RecoverGO(f func()) {
