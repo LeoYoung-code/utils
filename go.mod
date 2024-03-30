@@ -7,9 +7,9 @@ require (
 	github.com/bytedance/sonic v1.11.3
 	github.com/getsentry/sentry-go v0.27.0
 	github.com/go-kratos/kratos/v2 v2.7.3
-	github.com/jinzhu/copier v0.3.5
+	github.com/jinzhu/copier v0.4.0
 	github.com/jinzhu/now v1.1.5
-	github.com/panjf2000/ants/v2 v2.7.1
+	github.com/panjf2000/ants/v2 v2.9.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/profile v1.2.1
