@@ -192,3 +192,18 @@ func TestIsNowTimeIn(t *testing.T) {
 		})
 	}
 }
+
+func TestGetZeroTime(t *testing.T) {
+	tests := []struct {
+		name string
+		want time.Time
+	}{
+		{"1", time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC)},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, GetZeroTime(), "GetZeroTime()")
+			println(GetZeroTime().Unix())
+		})
+	}
+}

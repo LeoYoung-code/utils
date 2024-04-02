@@ -250,3 +250,7 @@ func IsNowTimeIn(startTime, endTime int64) bool {
 	}
 	return true
 }
+
+func GetZeroTime() time.Time {
+	return time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC)
+}
