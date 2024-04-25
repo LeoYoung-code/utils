@@ -17,7 +17,7 @@ require (
 	github.com/samber/lo v1.39.0
 	github.com/segmentio/ksuid v1.0.4
 	github.com/shirou/gopsutil/v3 v3.24.3
-	github.com/shopspring/decimal v1.3.1
+	github.com/shopspring/decimal v1.4.0
 	github.com/spf13/cast v1.5.0
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/sync v0.3.0
