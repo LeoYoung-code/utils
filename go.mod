@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/allegro/bigcache/v3 v3.1.0
-	github.com/bytedance/sonic v1.11.5
+	github.com/bytedance/sonic v1.11.6
 	github.com/getsentry/sentry-go v0.27.0
 	github.com/go-kratos/kratos/v2 v2.7.3
 	github.com/jinzhu/copier v0.4.0
@@ -18,15 +18,15 @@ require (
 	github.com/segmentio/ksuid v1.0.4
 	github.com/shirou/gopsutil/v3 v3.24.3
 	github.com/shopspring/decimal v1.4.0
-	github.com/spf13/cast v1.5.0
+	github.com/spf13/cast v1.6.0
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/sync v0.3.0
 	xorm.io/xorm v1.3.2
 )
 
 require (
-	github.com/bytedance/sonic/loader v0.1.0 // indirect
-	github.com/cloudwego/base64x v0.1.3 // indirect
+	github.com/bytedance/sonic/loader v0.1.1 // indirect
+	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/felixge/fgprof v0.9.3 // indirect
