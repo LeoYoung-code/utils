@@ -33,10 +33,10 @@ require (
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/pprof v0.0.0-20211214055906-6f57359322fd // indirect
+	github.com/google/pprof v0.0.0-20240509144519-723abb6459b7 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
-	github.com/lufia/plan9stats v0.0.0-20230326075908-cb1d2100619a // indirect
+	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
+	github.com/lufia/plan9stats v0.0.0-20240513124658-fba389f38bae // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
