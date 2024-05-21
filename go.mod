@@ -9,6 +9,7 @@ require (
 	github.com/go-kratos/kratos/v2 v2.7.3
 	github.com/jinzhu/copier v0.4.0
 	github.com/jinzhu/now v1.1.5
+	github.com/jung-kurt/gofpdf v1.16.2
 	github.com/panjf2000/ants/v2 v2.9.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
