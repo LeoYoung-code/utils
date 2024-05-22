@@ -29,6 +29,12 @@ output=$(curl  -w "
  time_redirect=%{time_redirect}\
  time_total=%{time_total}" -o /dev/null -s "$URL")
 
+# 检查 curl 命令是否成功
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to fetch URL"
+    exit 1
+fi
+
 echo "======================== 原始数据 ============================"
 echo $output
 echo "======================== 原始数据 end ============================"
