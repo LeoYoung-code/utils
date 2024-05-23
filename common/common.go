@@ -36,6 +36,17 @@ func GetSum32(data string) uint32 {
 	return h.Sum32()
 }
 
+/*
+UntilSuccess 会不断调用 runner，直到 runner 返回 true 或一个非 nil 的错误。
+
+在每次重试 runner 之前的暂停时间，最初等于 minRetryPeriod，并且每次重试后暂停时间变为之前的两倍，但不会超过 maxRetryPeriod。
+
+通常不应该在 runner 内部记录错误，你应该返回错误——从 runner 函数返回的非 nil 错误会带有堆栈信息和 runnerName 被记录。
+
+如果 runner 恐慌（panic），panic值将被转换为错误并记录堆栈信息，这种情况下重试逻辑与 runner 返回 false 和错误的情况相同。
+
+只有在 runner 返回成功且没有错误，或者 ctx 被取消时，UntilSuccess 才会返回。
+*/
 func UntilSuccess(
 	ctx context.Context,
 	runnerName string,
