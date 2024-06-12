@@ -5,7 +5,7 @@ go 1.22
 require (
 	github.com/allegro/bigcache/v3 v3.1.0
 	github.com/bytedance/sonic v1.11.8
-	github.com/getsentry/sentry-go v0.27.0
+	github.com/getsentry/sentry-go v0.28.0
 	github.com/go-kratos/kratos/v2 v2.7.3
 	github.com/jinzhu/copier v0.4.0
 	github.com/jinzhu/now v1.1.5
@@ -51,7 +51,7 @@ require (
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
 	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
 	golang.org/x/sys v0.19.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	xorm.io/builder v0.3.11-0.20220531020008-1bd24a7dc978 // indirect
 )
