@@ -4,7 +4,7 @@ import (
 	"github.com/jung-kurt/gofpdf"
 )
 
-func main() {
+func GeneratePDF() error {
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
 	pdf.SetFont("Arial", "B", 16)
@@ -12,6 +12,7 @@ func main() {
 
 	err := pdf.OutputFileAndClose("example.pdf")
 	if err != nil {
-		panic(err)
+		return err
 	}
+	return nil
 }
