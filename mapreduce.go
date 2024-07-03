@@ -1,5 +1,10 @@
 package utils
 
+import (
+	"fmt"
+	"sort"
+)
+
 // Map 数组元素遍历
 func Map[T1 any, T2 any](arr []T1, f func(T1) T2) []T2 {
 	result := make([]T2, len(arr))
@@ -113,4 +118,21 @@ func GetSliceIntersect[T any, C comparable](p1, p2 []T, f func(T) C) []T {
 		}
 	}
 	return p1temp
+}
+
+// SequenceTraversalMap 顺序遍历 map
+func SequenceTraversalMap(m map[string]int) {
+	// 提取键
+	keys := make([]string, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+
+	// 对键排序
+	sort.Strings(keys)
+
+	// 按排序后的键遍历
+	for _, key := range keys {
+		fmt.Println(key, m[key])
+	}
 }
