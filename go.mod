@@ -21,7 +21,7 @@ require (
 	github.com/shopspring/decimal v1.4.0
 	github.com/spf13/cast v1.6.0
 	github.com/stretchr/testify v1.9.0
-	golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8
+	golang.org/x/exp v0.0.0-20240707233637-46b078467d37
 	golang.org/x/sync v0.7.0
 	xorm.io/xorm v1.3.9
 )
