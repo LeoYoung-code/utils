@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/allegro/bigcache/v3 v3.1.0
-	github.com/bytedance/sonic v1.12.0
+	github.com/bytedance/sonic v1.12.1
 	github.com/getsentry/sentry-go v0.28.1
 	github.com/go-kratos/kratos/v2 v2.8.0
 	github.com/jinzhu/copier v0.4.0
@@ -15,7 +15,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/profile v1.7.0
 	github.com/rs/xid v1.5.0
-	github.com/samber/lo v1.46.0
+	github.com/samber/lo v1.47.0
 	github.com/segmentio/ksuid v1.0.4
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/shopspring/decimal v1.4.0
