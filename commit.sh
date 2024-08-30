@@ -15,4 +15,7 @@
   RESET='\033[0m'
 
   # 显示被删除的代码，并替换前缀，应用颜色样式
-  git show $(git rev-parse HEAD) -- ':!*.pb.go' | grep '^-' | grep -v '^---' | awk -v RED_BOLD="$RED_BOLD" -v RESET="$RESET" '{print RED_BOLD "您删除了: " RESET substr($0, 2)}'
+  git show $(git rev-parse HEAD) -- ':!*.pb.go' | awk -v RED_BOLD="$RED_BOLD" -v RESET="$RESET" '/^-/ {getline next_line; if (next_line !~ /^\+/) print RED_BOLD "您删除了: " RESET substr($0, 2)}'
+
+  # git diff
+#  git diff | awk -v RED_BOLD="$RED_BOLD" -v RESET="$RESET" '/^-/ {getline next_line; if (next_line !~ /^\+/) print RED_BOLD "您删除了: " RESET substr($0, 2)}'
