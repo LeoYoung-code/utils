@@ -7,6 +7,7 @@ type IBuilder interface {
 	getHouse() House
 }
 
+// 工厂模式
 func getBuilder(builderType string) IBuilder {
 	if builderType == "normal" {
 		return newNormalBuilder()

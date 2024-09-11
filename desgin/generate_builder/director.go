@@ -21,3 +21,11 @@ func (d *director) buildHouse() House {
 	d.builder.setNumFloor()
 	return d.builder.getHouse()
 }
+
+func (d *director) dismantleHouse() House {
+	// 拆除步骤 1 2 3
+	d.builder.setDoorType()
+	d.builder.setWindowType()
+	d.builder.setNumFloor()
+	return d.builder.getHouse()
+}
