@@ -33,6 +33,14 @@ func Test_generateTOTP(t *testing.T) {
 			want:    "",
 			wantErr: assert.Error,
 		},
+		{
+			name: "Test generate TOTP with empty secret",
+			args: args{
+				secret: "",
+			},
+			want:    "",
+			wantErr: assert.Error,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -41,6 +49,11 @@ func Test_generateTOTP(t *testing.T) {
 				return
 			}
 			assert.Equalf(t, tt.want, got, "generateTOTP(%v)", tt.args.secret)
+			if err != nil {
+				fmt.Println(err.Error())
+				return
+			}
+			fmt.Println(got)
 		})
 	}
 }

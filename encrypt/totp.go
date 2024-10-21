@@ -50,6 +50,10 @@ func truncateAndGenerateCode(hmacResult []byte) int {
 
 // 生成 TOTP 验证码
 func generateTOTP(secret string) (string, error) {
+	if len(secret) == 0 {
+		return "", fmt.Errorf("密钥不能为空")
+	}
+
 	// 解码 Base32 格式密钥
 	key, err := base32.StdEncoding.DecodeString(secret)
 	if err != nil {
