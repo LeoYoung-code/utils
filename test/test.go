@@ -3,7 +3,7 @@ package test
 import (
 	"strings"
 
-	"github.com/spf13/cast"
+	"github.com/LeoYoung-code/cast"
 )
 
 func testBase(i int64, base int64) int64 {

@@ -3,7 +3,7 @@ package version
 import (
 	"strings"
 
-	"github.com/spf13/cast"
+	"github.com/LeoYoung-code/cast"
 )
 
 // GetSysVersion 系统版本号 字符串格式转int 如"10.2"转10

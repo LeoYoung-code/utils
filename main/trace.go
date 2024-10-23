@@ -6,7 +6,7 @@ import (
 	"runtime/trace"
 )
 
-func main() {
+func main1() {
 
 	// 创建 trace文件
 	f, err := os.Create("trace.out")

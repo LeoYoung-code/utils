@@ -11,7 +11,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/spf13/cast"
+	"github.com/LeoYoung-code/cast"
 
 	"github.com/rs/xid"
 	"github.com/segmentio/ksuid"

@@ -3,7 +3,7 @@ package math
 import (
 	"testing"
 
-	"github.com/spf13/cast"
+	"github.com/LeoYoung-code/cast"
 	"github.com/stretchr/testify/assert"
 )
 
