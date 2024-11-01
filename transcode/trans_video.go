@@ -73,6 +73,10 @@ func transcodeVideoIO(input io.Reader, cmd *exec.Cmd) (io.Reader, error) {
 	}
 
 	// 返回包含输出的 io.Reader
+	if outputBuffer.Len() == 0 {
+		log.Println("outputBuffer 文件流为空")
+		return nil, fmt.Errorf("输出缓冲区为空")
+	}
 	return &outputBuffer, nil
 }
 
@@ -93,7 +97,7 @@ func doIO() {
 	// 创建并配置 ffmpeg 命令
 	// cmd := exec.Command("ffmpeg", "-i", "pipe:0", "-c:v", "libx264", "-preset", "veryfast", "-crf", "28", "-c:a", "aac", "-b:a", "128k", "-f", "mp4", "pipe:1")
 	// cmd := exec.Command("ffmpeg", "-i", "pipe:0", "-c:v", "libx264", "-preset", "veryfast", "-f", "mp4", "pipe:1")
-	cmd := exec.Command("ffmpeg", "-i", "pipe:0", "-c:v", "libx264", "-preset", "veryfast", "-f", "mp4", outputFilePath)
+	cmd := exec.Command("ffmpeg", "-i", "pipe:0", "-c:v", "libx264", "-preset", "veryfast", "-f", "mpegts", "pipe:1")
 	// 调用转码函数
 	outputReader, err := transcodeVideoIO(inputFile, cmd)
 	if err != nil {
@@ -102,7 +106,7 @@ func doIO() {
 	}
 
 	// 将转码后的数据输出到文件
-	outFile, err := os.Create("output.mp4")
+	outFile, err := os.Create(outputFilePath)
 	if err != nil {
 		fmt.Println("创建输出文件失败:", err)
 		return
@@ -118,6 +122,6 @@ func doIO() {
 	if _, err := io.Copy(outFile, outputReader); err != nil {
 		fmt.Println("写入输出文件失败:", err)
 	} else {
-		fmt.Println("视频转码成功并保存到 output.mp4！")
+		fmt.Println("视频转码成功并保存到", outputFilePath)
 	}
 }
