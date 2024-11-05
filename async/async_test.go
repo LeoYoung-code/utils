@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/getsentry/sentry-go"
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/pkg/errors"
 	"golang.org/x/sync/errgroup"
 )
@@ -17,7 +16,7 @@ func TestRecoverGO(t *testing.T) {
 		Dsn:        "https://50e55437f5774080a6eac8cc4a8edfc8@/3",
 		SampleRate: 1.0,
 	}); err != nil {
-		log.Infof("Sentry initialization failed: %v\n", err)
+		t.Log("Sentry initialization failed", err)
 	}
 	type args struct {
 		f func()
@@ -37,7 +36,7 @@ func TestRecoverGO(t *testing.T) {
 			args: args{f: func() {
 				var x [10]int
 				b := 10
-				x[b] = 10
+				x[b-1] = 10
 			}},
 		},
 	}
@@ -61,7 +60,7 @@ func TestRecoverWrap(t *testing.T) {
 		Dsn:        "https://50e55437f5774080a6eac8cc4a8edfc8/3",
 		SampleRate: 1.0,
 	}); err != nil {
-		log.Infof("Sentry initialization failed: %v\n", err)
+		t.Log("Sentry initialization failed", err)
 	}
 	type args struct {
 		f1 func() error
@@ -100,7 +99,7 @@ func TestRecoverWrap(t *testing.T) {
 				f1: func() error {
 					var x [10]int
 					b := 10
-					x[b] = 10
+					x[b-1] = 10
 					return nil
 				},
 				f2: func() error {
