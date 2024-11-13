@@ -5,7 +5,7 @@ go 1.23
 require (
 	github.com/LeoYoung-code/cast v1.0.1
 	github.com/allegro/bigcache/v3 v3.1.0
-	github.com/bytedance/sonic v1.12.3
+	github.com/bytedance/sonic v1.12.4
 	github.com/getsentry/sentry-go v0.29.1
 	github.com/go-kratos/kratos/v2 v2.8.2
 	github.com/jinzhu/copier v0.4.0
