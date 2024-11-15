@@ -9,7 +9,7 @@ import (
 	"github.com/LeoYoung-code/cast"
 )
 
-const SecretKeyOfParams = "p9LAIPj01RcBt7id===" //  参数待提供
+const SecretKeyOfParams = "p9LAIPj01RcBt7id" //  参数待提供
 
 // GenerateSign 生成签名
 func GenerateSign(params sort.StringSlice) string {
@@ -35,12 +35,10 @@ func ParamToSlice(param map[string]any) sort.StringSlice {
 
 func sign() {
 	param := map[string]any{
-		"id":                10001,
-		"product_id":        "4280:23:10",
-		"scene":             "23",
-		"sign":              "9af951e19d15095b28f02995fcd71453",
-		"type":              "1",
-		"unique_request_id": "1000302335",
+		"request_id":      "82",
+		"third_party_uid": "94",
+		"sign":            "in",
+		"coin_cnt":        17,
 	}
 	sign := GenerateSign(ParamToSlice(param))
 	println(sign)
