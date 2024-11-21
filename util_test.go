@@ -342,26 +342,6 @@ func TestIsUnion(t *testing.T) {
 	}
 }
 
-func TestJoin(t *testing.T) {
-	type args[T comparable] struct {
-		t1  []T
-		sep string
-	}
-	type testCase[T comparable] struct {
-		name string
-		args args[T]
-		want string
-	}
-	tests := []testCase[int]{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, Join(tt.args.t1, tt.args.sep), "Join(%v, %v)", tt.args.t1, tt.args.sep)
-		})
-	}
-}
-
 func TestMapStringVal(t *testing.T) {
 	type args struct {
 		sl map[string]string
@@ -524,49 +504,6 @@ func TestUrlPath1(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, UrlPath(tt.args.rawURL), "UrlPath(%v)", tt.args.rawURL)
-		})
-	}
-}
-
-func Test_stringSlice2Int64Slice(t *testing.T) {
-	type args struct {
-		s []string
-	}
-	tests := []struct {
-		name string
-		args args
-		want []int64
-	}{
-		{
-			name: "test1",
-			args: args{s: []string{"1", "2", "3", "4"}},
-			want: []int64{1, 2, 3, 4},
-		},
-		{
-			name: "test2",
-			args: args{s: []string{"1", "2", "3", "4", "5", "5"}},
-			want: []int64{1, 2, 3, 4, 5},
-		},
-		{
-			name: "test3",
-			args: args{s: []string{}},
-			want: []int64{},
-		},
-		{
-			name: "test4",
-			args: args{s: nil},
-			want: []int64{},
-		},
-
-		{
-			name: "test5",
-			args: args{s: []string{"1", "2", "3", "4", "abc", "bcd"}},
-			want: []int64{1, 2, 3, 4},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, S2Int64Slice(tt.args.s), "stringSlice2Int64Slice(%v)", tt.args.s)
 		})
 	}
 }

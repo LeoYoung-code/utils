@@ -11,8 +11,6 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/LeoYoung-code/cast"
-
 	"github.com/rs/xid"
 	"github.com/segmentio/ksuid"
 
@@ -176,10 +174,6 @@ func IsOnline(upTime, downTime int64) int64 {
 	return isOnline
 }
 
-func Join[T comparable](t1 []T, sep string) string {
-	return strings.Join(Map(t1, func(i T) string { return cast.ToString(i) }), sep)
-}
-
 // Include 判断是否在切片中存在
 func Include[T comparable](arr []T, check T) bool {
 	for _, v := range arr {
@@ -237,17 +231,4 @@ func Md5Parser(value string) int64 {
 
 	// 取模
 	return i % 40960
-}
-
-// S2Int64Slice string2Int64Slice 抛弃字符串
-func S2Int64Slice(s []string) []int64 {
-	intSlice := make([]int64, 0, len(s))
-	for _, v := range s {
-		r, err := cast.ToInt64E(v)
-		if err != nil {
-			continue
-		}
-		intSlice = append(intSlice, r)
-	}
-	return Set(intSlice)
 }
