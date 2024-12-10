@@ -5,69 +5,73 @@ import (
 	"runtime"
 	"runtime/debug"
 	"time"
+
+	json "github.com/bytedance/sonic"
 )
 
-func PrintGCStats() {
+func printGCStats() {
 	t := time.NewTicker(time.Second)
 	s := debug.GCStats{}
 	for {
 		select {
 		case <-t.C:
 			debug.ReadGCStats(&s)
-			fmt.Printf(
-				"GC: NumGC: %d,  PauseTotal: %d, Pause: %d, PauseEnd: %v, PauseQuantiles: %d, LastGC: %v\n",
-				s.NumGC,
-				s.PauseTotal,
-				s.Pause,
-				s.PauseEnd,
-				s.PauseQuantiles,
-				s.LastGC,
-			)
+			m := map[string]interface{}{
+				"NumGC":      s.NumGC,
+				"PauseTotal": s.PauseTotal,
+				// "Pause":          s.Pause,
+				// "PauseEnd":       s.PauseEnd,
+				"PauseQuantiles": s.PauseQuantiles,
+				"LastGC":         s.LastGC,
+			}
+			b, _ := json.Marshal(m)
+			fmt.Println(string(b))
 		}
 	}
 }
 
-func PrintMemStats() {
+func printMemStats() {
 	t := time.NewTicker(time.Second)
 	s := runtime.MemStats{}
 	for {
 		select {
 		case <-t.C:
 			runtime.ReadMemStats(&s)
-			fmt.Printf(
-				"Mem: Alloc: %d, TotalAlloc: %d, Sys: %d, Lookups: %d, Mallocs: %d, Frees: %d, HeapAlloc: %d, HeapSys: %d, HeapIdle: %d, HeapInuse: %d, HeapReleased: %d, HeapObjects: %d, StackInuse: %d, StackSys: %d, MSpanInuse: %d, MSpanSys: %d, MCacheInuse: %d, MCacheSys: %d, BuckHashSys: %d, GCSys: %d, OtherSys: %d, NextGC: %d, LastGC: %d, PauseTotalNs: %d, PauseNs: %d, PauseEnd: %d, NumGC: %d, NumForcedGC: %d, GCCPUFraction: %f, DebugGC: %t, BySize: %v\n",
-				s.Alloc,
-				s.TotalAlloc,
-				s.Sys,
-				s.Lookups,
-				s.Mallocs,
-				s.Frees,
-				s.HeapAlloc,
-				s.HeapSys,
-				s.HeapIdle,
-				s.HeapInuse,
-				s.HeapReleased,
-				s.HeapObjects,
-				s.StackInuse,
-				s.StackSys,
-				s.MSpanInuse,
-				s.MSpanSys,
-				s.MCacheInuse,
-				s.MCacheSys,
-				s.BuckHashSys,
-				s.GCSys,
-				s.OtherSys,
-				s.NextGC,
-				s.LastGC,
-				s.PauseTotalNs,
-				s.PauseNs,
-				s.PauseEnd,
-				s.NumGC,
-				s.NumForcedGC,
-				s.GCCPUFraction,
-				s.DebugGC,
-				s.BySize,
-			)
+			m := map[string]interface{}{
+				"Alloc":         s.Alloc,
+				"TotalAlloc":    s.TotalAlloc,
+				"Sys":           s.Sys,
+				"Lookups":       s.Lookups,
+				"Mallocs":       s.Mallocs,
+				"Frees":         s.Frees,
+				"HeapAlloc":     s.HeapAlloc,
+				"HeapSys":       s.HeapSys,
+				"HeapIdle":      s.HeapIdle,
+				"HeapInuse":     s.HeapInuse,
+				"HeapReleased":  s.HeapReleased,
+				"HeapObjects":   s.HeapObjects,
+				"StackInuse":    s.StackInuse,
+				"StackSys":      s.StackSys,
+				"MSpanInuse":    s.MSpanInuse,
+				"MSpanSys":      s.MSpanSys,
+				"MCacheInuse":   s.MCacheInuse,
+				"MCacheSys":     s.MCacheSys,
+				"BuckHashSys":   s.BuckHashSys,
+				"GCSys":         s.GCSys,
+				"OtherSys":      s.OtherSys,
+				"NextGC":        s.NextGC,
+				"LastGC":        s.LastGC,
+				"PauseTotalNs":  s.PauseTotalNs,
+				"PauseNs":       s.PauseNs,
+				"PauseEnd":      s.PauseEnd,
+				"NumGC":         s.NumGC,
+				"NumForcedGC":   s.NumForcedGC,
+				"GCCPUFraction": s.GCCPUFraction,
+				"DebugGC":       s.DebugGC,
+				"BySize":        s.BySize,
+			}
+			b, _ := json.Marshal(m)
+			fmt.Println(string(b))
 		}
 	}
 }
