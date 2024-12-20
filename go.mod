@@ -5,7 +5,7 @@ go 1.23
 require (
 	github.com/LeoYoung-code/cast v1.0.1
 	github.com/allegro/bigcache/v3 v3.1.0
-	github.com/bytedance/sonic v1.12.5
+	github.com/bytedance/sonic v1.12.6
 	github.com/getsentry/sentry-go v0.30.0
 	github.com/go-kratos/kratos/v2 v2.8.2
 	github.com/jinzhu/copier v0.4.0
@@ -23,7 +23,7 @@ require (
 	github.com/spf13/cast v1.7.0
 	github.com/stretchr/testify v1.10.0
 	github.com/yitter/idgenerator-go v1.3.3
-	golang.org/x/exp v0.0.0-20241204233417-43b7b7cde48d
+	golang.org/x/exp v0.0.0-20241217172543-b2144cdd0a67
 	golang.org/x/sync v0.10.0
 	xorm.io/xorm v1.3.9
 )
@@ -38,9 +38,9 @@ require (
 	github.com/felixge/fgprof v0.9.5 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
-	github.com/goccy/go-json v0.10.3 // indirect
+	github.com/goccy/go-json v0.10.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/pprof v0.0.0-20241206021119-61a79c692802 // indirect
+	github.com/google/pprof v0.0.0-20241210010833-40e02aabc2ad // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.9 // indirect
 	github.com/lufia/plan9stats v0.0.0-20240909124753-873cd0166683 // indirect
