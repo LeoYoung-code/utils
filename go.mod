@@ -5,13 +5,13 @@ go 1.23
 require (
 	github.com/LeoYoung-code/cast v1.0.1
 	github.com/allegro/bigcache/v3 v3.1.0
-	github.com/bytedance/sonic v1.12.6
+	github.com/bytedance/sonic v1.12.7
 	github.com/getsentry/sentry-go v0.31.1
 	github.com/go-kratos/kratos/v2 v2.8.3
 	github.com/jinzhu/copier v0.4.0
 	github.com/jinzhu/now v1.1.5
 	github.com/jung-kurt/gofpdf v1.16.2
-	github.com/panjf2000/ants/v2 v2.10.0
+	github.com/panjf2000/ants/v2 v2.11.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/profile v1.7.0
@@ -23,13 +23,13 @@ require (
 	github.com/spf13/cast v1.7.1
 	github.com/stretchr/testify v1.10.0
 	github.com/yitter/idgenerator-go v1.3.3
-	golang.org/x/exp v0.0.0-20250103183323-7d7fa50e5329
+	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8
 	golang.org/x/sync v0.10.0
 	xorm.io/xorm v1.3.9
 )
 
 require (
-	github.com/bytedance/sonic/loader v0.2.1 // indirect
+	github.com/bytedance/sonic/loader v0.2.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
@@ -59,7 +59,7 @@ require (
 	golang.org/x/arch v0.13.0 // indirect
 	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
-	google.golang.org/protobuf v1.36.1 // indirect
+	google.golang.org/protobuf v1.36.3 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	xorm.io/builder v0.3.13 // indirect
 )
