@@ -1,11 +1,11 @@
 module utils
 
-go 1.23
+go 1.24
 
 require (
 	github.com/LeoYoung-code/cast v1.0.1
 	github.com/allegro/bigcache/v3 v3.1.0
-	github.com/bytedance/sonic v1.12.7
+	github.com/bytedance/sonic v1.12.8
 	github.com/getsentry/sentry-go v0.31.1
 	github.com/go-kratos/kratos/v2 v2.8.3
 	github.com/jinzhu/copier v0.4.0
