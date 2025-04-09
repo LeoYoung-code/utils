@@ -63,13 +63,6 @@ func UntilSuccess(
 	incrementalTimer := newIncrementalTimer(minRetryPeriod, maxRetryPeriod, 2)
 
 	for !success || err != nil {
-
-		if err != nil {
-
-		} else {
-
-		}
-
 		select {
 		case <-ctx.Done():
 			return
@@ -89,7 +82,12 @@ func runSafelyWithSuccess(ctx context.Context, runnerName string, runner func(co
 	defer func() {
 		if rec := recover(); rec != nil {
 			success = false
-			err = errors.Wrap(errors.WithStack(rec.(error)), fmt.Sprintf("Runner '%s' panicked", runnerName))
+			switch v := rec.(type) {
+			case error:
+				err = errors.Wrap(errors.WithStack(v), fmt.Sprintf("Runner '%s' panicked", runnerName))
+			default:
+				err = errors.New(fmt.Sprintf("Runner '%s' panicked: %v", runnerName, v))
+			}
 		}
 	}()
 
@@ -99,7 +97,7 @@ func runSafelyWithSuccess(ctx context.Context, runnerName string, runner func(co
 type incrementalTimer struct {
 	initialPeriod time.Duration
 	maxPeriod     time.Duration
-	multiplier    time.Duration
+	multiplier    int
 
 	currentPeriod time.Duration
 	iteration     int
@@ -109,7 +107,7 @@ func newIncrementalTimer(initialPeriod, maxPeriod time.Duration, multiplier int)
 	return &incrementalTimer{
 		initialPeriod: initialPeriod,
 		maxPeriod:     maxPeriod,
-		multiplier:    time.Duration(multiplier),
+		multiplier:    multiplier,
 
 		currentPeriod: initialPeriod,
 		iteration:     0,
@@ -119,7 +117,7 @@ func newIncrementalTimer(initialPeriod, maxPeriod time.Duration, multiplier int)
 func (t *incrementalTimer) next() <-chan time.Time {
 	result := time.After(t.currentPeriod)
 
-	t.currentPeriod = t.currentPeriod * t.multiplier
+	t.currentPeriod = t.currentPeriod * time.Duration(t.multiplier)
 
 	if t.currentPeriod > t.maxPeriod {
 		t.currentPeriod = t.maxPeriod
