@@ -1,6 +1,6 @@
 module utils
 
-go 1.24
+go 1.24.2
 
 require (
 	github.com/LeoYoung-code/cast v1.0.1

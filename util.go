@@ -40,29 +40,31 @@ func ToString(data any) string {
 	return *(*string)(unsafe.Pointer(&b))
 }
 
-// IsNum 判断字符串是否是数字
-// 传值 "3.14", name 会按照3.14搜索 ，不需要这样搜索则使用ParseFloat
-func IsNum(s string) bool {
-	_, err := strconv.ParseInt(s, 0, 10)
+// IsInteger 判断字符串是否是整数
+func IsInteger(s string) bool {
+	_, err := strconv.ParseInt(s, 0, 64)
 	return err == nil
+}
+
+// IsNumber 判断字符串是否是数字（包括整数和浮点数）
+func IsNumber(s string) bool {
+	_, err := strconv.ParseFloat(s, 64)
+	return err == nil
+}
+
+// IsNum 判断字符串是否是数字 (已弃用，请使用 IsInteger 或 IsNumber)
+func IsNum(s string) bool {
+	return IsInteger(s)
 }
 
 // IsRepByLoop 判断切片中是否存在重复元素
 func IsRepByLoop(origin []int64) error {
-	var result []int64 // 存放结果
-	for i := range origin {
-		flag := true
-		for j := range result {
-			if origin[i] == result[j] {
-				flag = false // 存在重复元素，标识为false
-				break
-			}
-		}
-		if flag {
-			result = append(result, origin[i])
-		} else { // 标识为false，不添加进结果, 返回错误
+	seen := make(map[int64]struct{}, len(origin))
+	for _, v := range origin {
+		if _, exists := seen[v]; exists {
 			return errors.New("切片存在重复元素")
 		}
+		seen[v] = struct{}{}
 	}
 	return nil
 }
@@ -82,15 +84,23 @@ func IsInt64In(element int64, targetSlice []int64) bool {
 	return false
 }
 
-func ContainsString(array []string, val string) (index int) {
-	index = -1
-	for i := 0; i < len(array); i++ {
-		if array[i] == val {
-			index = i
-			return
+// Contains 泛型函数，判断元素是否在切片中
+func Contains[T comparable](slice []T, element T) bool {
+	for _, v := range slice {
+		if v == element {
+			return true
 		}
 	}
-	return
+	return false
+}
+
+func ContainsString(array []string, val string) (index int) {
+	for i, item := range array {
+		if item == val {
+			return i
+		}
+	}
+	return -1
 }
 
 // Ternary 三目运算的函数
@@ -103,11 +113,10 @@ func Ternary(a bool, b, c any) any {
 
 // Explode 字符串转换字符串数组
 func Explode(delimiter, text string) []string {
-	if len(delimiter) > len(text) {
-		return strings.Split(delimiter, text)
-	} else {
-		return strings.Split(text, delimiter)
+	if text == "" {
+		return []string{}
 	}
+	return strings.Split(text, delimiter)
 }
 
 // MapStringVal 取map字段
@@ -200,9 +209,11 @@ func IsUnion[T comparable](arr1 []T, arr2 []T) bool {
 
 // RandomElement 随机获取切片中的一个元素
 func RandomElement(s []any) any {
-	// 设置 rand 包的 Seed 值
-	rand.Seed(time.Now().UnixNano())
-	index := rand.Intn(len(s))
+	if len(s) == 0 {
+		return nil
+	}
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	index := r.Intn(len(s))
 	return s[index]
 }
 
