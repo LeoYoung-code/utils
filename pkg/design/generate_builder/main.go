@@ -2,22 +2,25 @@ package main
 
 import "fmt"
 
+// main 函数演示建造者模式的使用方法
 func main() {
-	normalBuilder := getBuilder("normal")
-	iglooBuilder := getBuilder("igloo")
+	// 创建不同类型的建造者
+	normalBuilder := GetBuilder(NormalBuilderType)
+	iglooBuilder := GetBuilder(IglooBuilderType)
 
-	director := newDirector(normalBuilder)
-	normalHouse := director.buildHouse()
+	// 创建指挥者并使用普通建造者构建房屋
+	director := NewDirector(normalBuilder)
+	normalHouse := director.BuildHouse()
 
-	fmt.Printf("Normal House Door Type: %s\n", normalHouse.doorType)
-	fmt.Printf("Normal House Window Type: %s\n", normalHouse.windowType)
-	fmt.Printf("Normal House Num Floor: %d\n", normalHouse.floor)
+	// 输出普通房屋的信息
+	fmt.Println("普通房屋信息:")
+	fmt.Println(normalHouse)
 
-	director.setBuilder(iglooBuilder)
-	iglooHouse := director.buildHouse()
+	// 切换至冰屋建造者并构建冰屋
+	director.SetBuilder(iglooBuilder)
+	iglooHouse := director.BuildHouse()
 
-	fmt.Printf("\nIgloo House Door Type: %s\n", iglooHouse.doorType)
-	fmt.Printf("Igloo House Window Type: %s\n", iglooHouse.windowType)
-	fmt.Printf("Igloo House Num Floor: %d\n", iglooHouse.floor)
-
+	// 输出冰屋的信息
+	fmt.Println("\n冰屋信息:")
+	fmt.Println(iglooHouse)
 }
