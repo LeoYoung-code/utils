@@ -33,6 +33,49 @@ func TestTimeToString(t *testing.T) {
 	}
 }
 
+func TestParseTimeWithLayout(t *testing.T) {
+	tests := []struct {
+		name      string
+		timeStr   string
+		layout    string
+		wantValid bool
+	}{
+		{name: "有效时间字符串", timeStr: "2022-01-01", layout: DateLayout, wantValid: true},
+		{name: "无效时间字符串", timeStr: "2022-13-01", layout: DateLayout, wantValid: false},
+		{name: "空时间字符串", timeStr: "", layout: DateLayout, wantValid: false},
+		{name: "格式不匹配", timeStr: "2022/01/01", layout: DateLayout, wantValid: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, valid := parseTimeWithLayout(tt.timeStr, tt.layout)
+			assert.Equal(t, tt.wantValid, valid, "parseTimeWithLayout valid result")
+			if tt.wantValid {
+				assert.False(t, result.IsZero(), "parsed time should not be zero")
+			}
+		})
+	}
+}
+
+func TestStringToTime(t *testing.T) {
+	tests := []struct {
+		name      string
+		timeStr   string
+		layout    string
+		wantValid bool
+	}{
+		{name: "有效日期字符串", timeStr: "2022-01-01", layout: DateLayout, wantValid: true},
+		{name: "有效时间字符串", timeStr: "2022-01-01 12:30:45", layout: TimeLayout, wantValid: true},
+		{name: "无效字符串", timeStr: "invalid", layout: DateLayout, wantValid: false},
+		{name: "空字符串", timeStr: "", layout: DateLayout, wantValid: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, valid := StringToTime(tt.timeStr, tt.layout)
+			assert.Equal(t, tt.wantValid, valid, "StringToTime valid result")
+		})
+	}
+}
+
 func TestDateStringToTime(t *testing.T) {
 	location, err := time.LoadLocation("Asia/Shanghai")
 	assert.NoError(t, err)
@@ -43,6 +86,16 @@ func TestDateStringToTime(t *testing.T) {
 	format := time.Unix(unix, 0).Format(TimeLayout)
 	assert.Equal(t, "2022-01-01 00:00:00", format)
 	// "2022-01-01" time.Parse 之后的时间戳是  "2022-01-01 08:00:00"
+
+	// 测试新的实现
+	result := DateStringToTime("2022-01-01")
+	assert.Equal(t, tt.Year(), result.Year())
+	assert.Equal(t, tt.Month(), result.Month())
+	assert.Equal(t, tt.Day(), result.Day())
+
+	// 测试无效日期
+	invalidResult := DateStringToTime("invalid-date")
+	assert.NotEqual(t, 1970, invalidResult.Year(), "应该返回当前时间而非零时间")
 }
 
 func TestDateStringToYmdInt(t *testing.T) {
@@ -131,6 +184,50 @@ func TestPoint2DateTime(t *testing.T) {
 	}
 }
 
+func TestStringToUnixTime(t *testing.T) {
+	tests := []struct {
+		name string
+		ts   string
+		want int64
+	}{
+		{"有效时间", "2022-01-01 12:00:00", 1641013200},
+		{"无效时间", "invalid", 0},
+		{"空字符串", "", 0},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := StringToUnixTime(tt.ts)
+			if tt.want > 0 {
+				assert.Greater(t, result, int64(0), "有效时间应该返回正时间戳")
+			} else {
+				assert.Equal(t, tt.want, result, "无效时间应该返回0")
+			}
+		})
+	}
+}
+
+func TestDateStringToUnixTime(t *testing.T) {
+	tests := []struct {
+		name string
+		ts   string
+		want int64
+	}{
+		{"有效日期", "2022-01-01", 1640966400},
+		{"无效日期", "invalid", 0},
+		{"空字符串", "", 0},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := DateStringToUnixTime(tt.ts)
+			if tt.want > 0 {
+				assert.Greater(t, result, int64(0), "有效日期应该返回正时间戳")
+			} else {
+				assert.Equal(t, tt.want, result, "无效日期应该返回0")
+			}
+		})
+	}
+}
+
 func TestDiffDateOfDay(t *testing.T) {
 	type args struct {
 		d1 string
@@ -143,6 +240,8 @@ func TestDiffDateOfDay(t *testing.T) {
 		want float64
 	}{
 		{"1", "2022-11-01", "2022-11-03", float64(3)},
+		{"无效日期", "invalid", "2022-11-03", float64(0)},
+		{"无效日期2", "2022-11-01", "invalid", float64(0)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
