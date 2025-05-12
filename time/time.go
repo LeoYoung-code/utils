@@ -17,10 +17,22 @@ const (
 	YearMonthLayout = "200601"
 	HourLayout      = "15:04"
 	MinLayout       = "15:04"
-	HOUR_MIN_LAYOUT = "15:04:05"
+	HourMinLayout   = "15:04:05"
 )
 
 var location, _ = time.LoadLocation("Asia/Shanghai")
+
+func parseTimeWithLayout(timeStr, layout string) (time.Time, bool) {
+	if timeStr == "" {
+		return time.Time{}, false
+	}
+	t, err := time.ParseInLocation(layout, timeStr, location)
+	if err != nil {
+		log.Error(err.Error())
+		return time.Time{}, false
+	}
+	return t, true
+}
 
 func TimeToString(t *time.Time) string {
 	// 获取指定时间
@@ -49,17 +61,13 @@ func TimeToDateString(t *time.Time) string {
 
 // DateStringToYmdInt 2006-01-02(string) -> 20060102(int64)
 func DateStringToYmdInt(dt string) int64 {
-	if len(dt) == 0 {
+	t, ok := parseTimeWithLayout(dt, DateLayout)
+	if !ok {
 		return 0
 	}
-	t, err := time.ParseInLocation(DateLayout, dt, location)
+	ymd, err := strconv.ParseInt(t.Format(YmdLayout), 10, 64)
 	if err != nil {
 		log.Error(err.Error())
-		return 0
-	}
-	ymd, err2 := strconv.ParseInt(t.Format(YmdLayout), 10, 64)
-	if err2 != nil {
-		log.Error(err2.Error())
 		return 0
 	}
 	return ymd
@@ -76,9 +84,8 @@ func YmdIntToDateString(dt int64) string {
 	if dt == 0 {
 		return "-"
 	}
-	t, err := time.ParseInLocation(YmdLayout, strconv.FormatInt(dt, 10), location)
-	if err != nil {
-		log.Error(err.Error())
+	t, ok := parseTimeWithLayout(strconv.FormatInt(dt, 10), YmdLayout)
+	if !ok {
 		return "-"
 	}
 	return t.Format(DateLayout)
@@ -97,33 +104,29 @@ func CurrentYearMonth() string {
 	return time.Now().Format(YearMonthLayout)
 }
 
+// IntToTime 时间戳转时间对象
 func IntToTime(ts int64) time.Time {
-	a := time.Unix(ts, 0)
-	return a
+	return time.Unix(ts, 0)
 }
 
+// StringToTime 通用的字符串转时间函数
+func StringToTime(ts string, layout string) (time.Time, bool) {
+	return parseTimeWithLayout(ts, layout)
+}
+
+// TimeStringToTime 标准时间字符串转Time
 func TimeStringToTime(ts string) time.Time {
-	t, err := time.ParseInLocation(TimeLayout, ts, location)
-	if err != nil {
-		log.Error(err.Error())
+	t, ok := parseTimeWithLayout(ts, TimeLayout)
+	if !ok {
 		return time.Now()
 	}
 	return t
 }
 
-func TimeString2Time(ts string, layout string) time.Time {
-	t, err := time.ParseInLocation(layout, ts, location)
-	if err != nil {
-		log.Error(err.Error())
-		return time.Now()
-	}
-	return t
-}
-
+// DateStringToTime 日期字符串转Time
 func DateStringToTime(ts string) time.Time {
-	t, err := time.ParseInLocation(DateLayout, ts, location)
-	if err != nil {
-		log.Error(err.Error())
+	t, ok := parseTimeWithLayout(ts, DateLayout)
+	if !ok {
 		return time.Now()
 	}
 	return t
@@ -134,7 +137,6 @@ func Int2Time(ts int64) string {
 	if ts == 0 {
 		return ""
 	}
-	// return time.go.Unix(ts, 0).Format(TIME_LAYOUT)
 	t := IntToTime(ts)
 	return TimeToString(&t)
 }
@@ -148,19 +150,25 @@ func Int2Date(ts int64) string {
 	return TimeToDateString(&t)
 }
 
+// StringToUnixTime 时间字符串转时间戳
 func StringToUnixTime(ts string) int64 {
-	t := TimeStringToTime(ts)
-	return t.Unix()
-}
-
-func DateStringToUnixTime(ts string) int64 {
-	if ts == "" {
+	t, ok := parseTimeWithLayout(ts, TimeLayout)
+	if !ok {
 		return 0
 	}
-	t := DateStringToTime(ts)
 	return t.Unix()
 }
 
+// DateStringToUnixTime 日期字符串转时间戳
+func DateStringToUnixTime(ts string) int64 {
+	t, ok := parseTimeWithLayout(ts, DateLayout)
+	if !ok {
+		return 0
+	}
+	return t.Unix()
+}
+
+// FormatDurationTxt 格式化时间段为可读文本
 func FormatDurationTxt(startTime, endTime int64) string {
 	if startTime == 0 || endTime == 0 {
 		return "不限"
@@ -195,6 +203,7 @@ func Point2DateTime(date string, point int) string {
 	return hourMin
 }
 
+// Time2Point 当前时间转换为point值
 func Time2Point(date string) int64 {
 	ts := time.Now()
 	point := ts.Hour()*12 + ts.Minute()/5
@@ -203,8 +212,11 @@ func Time2Point(date string) int64 {
 
 // DiffDateOfDay 计算两个日期（Ymd）间隔天数
 func DiffDateOfDay(start, end string) float64 {
-	t1, _ := time.Parse(DateLayout, start)
-	t2, _ := time.Parse(DateLayout, end)
+	t1, ok1 := parseTimeWithLayout(start, DateLayout)
+	t2, ok2 := parseTimeWithLayout(end, DateLayout)
+	if !ok1 || !ok2 {
+		return 0
+	}
 	return (t2.Sub(t1).Hours() / 24) + 1
 }
 
@@ -215,7 +227,7 @@ func TodayLastTime() time.Duration {
 	return tomorrow.Sub(loc)
 }
 
-// FormatDuration 格式化时间
+// FormatDuration 格式化时间范围为时间戳
 func FormatDuration(startTime, endTime string) (int64, int64) {
 	if startTime == "" || endTime == "" {
 		return 0, 0
@@ -225,7 +237,7 @@ func FormatDuration(startTime, endTime string) (int64, int64) {
 	return s, e
 }
 
-// FormatDuration2Time 格式化时间
+// FormatDuration2Time 格式化时间范围为时间对象
 func FormatDuration2Time(startTime, endTime string) (time.Time, time.Time) {
 	if startTime == "" || endTime == "" {
 		return time.Now(), time.Now()
@@ -235,7 +247,7 @@ func FormatDuration2Time(startTime, endTime string) (time.Time, time.Time) {
 	return s, e
 }
 
-// IsNowTimeIn 现在的时候是否在 某个时间段内
+// IsNowTimeIn 现在的时候是否在某个时间段内
 func IsNowTimeIn(startTime, endTime int64) bool {
 	if endTime == 0 {
 		return true
@@ -251,6 +263,7 @@ func IsNowTimeIn(startTime, endTime int64) bool {
 	return true
 }
 
+// GetZeroTime 获取零时间
 func GetZeroTime() time.Time {
 	return time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC)
 }
