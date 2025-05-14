@@ -94,7 +94,48 @@ func TestUcFirst(t *testing.T) {
 		args args
 		want string
 	}{
-		// TODO: Add test cases.
+		{
+			name: "empty_string",
+			args: args{
+				str: "",
+			},
+			want: "",
+		},
+		{
+			name: "single_char",
+			args: args{
+				str: "h",
+			},
+			want: "H",
+		},
+		{
+			name: "normal_word",
+			args: args{
+				str: "hello",
+			},
+			want: "Hello",
+		},
+		{
+			name: "already_uppercase",
+			args: args{
+				str: "Hello",
+			},
+			want: "Hello",
+		},
+		{
+			name: "with_spaces",
+			args: args{
+				str: "hello world",
+			},
+			want: "Hello world",
+		},
+		{
+			name: "with_special_chars",
+			args: args{
+				str: "hello!world",
+			},
+			want: "Hello!world",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -260,6 +301,44 @@ func TestStringToBytes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := StringToBytes(tt.args.s); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("StringToBytes() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGenerateRandomString(t *testing.T) {
+	tests := []struct {
+		name   string
+		length int
+	}{
+		{
+			name:   "zero_length",
+			length: 0,
+		},
+		{
+			name:   "short_string",
+			length: 8,
+		},
+		{
+			name:   "medium_string",
+			length: 16,
+		},
+		{
+			name:   "long_string",
+			length: 32,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := GenerateRandomString(tt.length)
+			if len(got) != tt.length {
+				t.Errorf("GenerateRandomString() length = %v, want %v", len(got), tt.length)
+			}
+
+			// 生成两次，验证随机性
+			got2 := GenerateRandomString(tt.length)
+			if tt.length > 0 && got == got2 {
+				t.Errorf("GenerateRandomString() should generate different strings for the same length")
 			}
 		})
 	}
