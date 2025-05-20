@@ -1,77 +1,73 @@
 package set
 
-import (
-	"fmt"
-	"testing"
+import "testing"
 
-	"github.com/stretchr/testify/assert"
-)
+func TestMapSet(t *testing.T) {
+	// 创建一个新的集合
+	s := make(MapSet)
 
-func TestSetStruct_Add(t *testing.T) {
-	type args struct {
-		key string
+	// 测试初始状态
+	if s.Size() != 0 {
+		t.Errorf("Expected size 0, got %d", s.Size())
 	}
-	tests := []struct {
-		name string
-		s    MapSet
-		args args
-	}{
-		{"test1", MapSet{
-			"a": {},
-			"b": {},
-			"c": {},
-		}, args{"d(new)"}},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.s.Add(tt.args.key)
-		})
-		fmt.Println(tt.s)
-	}
-}
 
-func TestSetStruct_Delete(t *testing.T) {
-	type args struct {
-		key string
+	// 测试添加元素
+	s.Add("a")
+	s.Add("b")
+	if s.Size() != 2 {
+		t.Errorf("Expected size 2, got %d", s.Size())
 	}
-	tests := []struct {
-		name string
-		s    MapSet
-		args args
-	}{
-		{"test1", MapSet{
-			"a": {},
-			"b": {},
-			"c": {},
-		}, args{"a"}},
+	if !s.Has("a") {
+		t.Errorf("Expected to have key 'a'")
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.s.Delete(tt.args.key)
-		})
-		fmt.Println(tt.s)
+	if !s.Has("b") {
+		t.Errorf("Expected to have key 'b'")
 	}
-}
 
-func TestSetStruct_Has(t *testing.T) {
-	type args struct {
-		key string
+	// 测试重复添加
+	s.Add("a")
+	if s.Size() != 2 {
+		t.Errorf("Expected size 2 after duplicate add, got %d", s.Size())
 	}
-	tests := []struct {
-		name string
-		s    MapSet
-		args args
-		want bool
-	}{
-		{"test1", MapSet{
-			"a": {},
-			"b": {},
-			"c": {},
-		}, args{"a"}, true},
+
+	// 测试删除
+	s.Delete("a")
+	if s.Size() != 1 {
+		t.Errorf("Expected size 1 after delete, got %d", s.Size())
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, tt.s.Has(tt.args.key), "Has(%v)", tt.args.key)
-		})
+	if s.Has("a") {
+		t.Errorf("Unexpected key 'a' after delete")
+	}
+
+	// 测试Values方法
+	values := s.Values()
+	if len(values) != 1 {
+		t.Errorf("Expected 1 value, got %d", len(values))
+	}
+	if values[0] != "b" {
+		t.Errorf("Expected value 'b', got '%s'", values[0])
+	}
+
+	// 测试Clear方法
+	s.Clear()
+	if s.Size() != 0 {
+		t.Errorf("Expected size 0 after clear, got %d", s.Size())
+	}
+	if s.Has("b") {
+		t.Errorf("Unexpected key 'b' after clear")
+	}
+
+	// 测试Each方法
+	count := 0
+	s.Add("x")
+	s.Add("y")
+	s.Each(func(key string) {
+		count++
+		if key != "x" && key != "y" {
+			t.Errorf("Unexpected key: %s", key)
+		}
+	})
+	if count != 2 {
+		t.Errorf("Expected to iterate 2 items, got %d", count)
 	}
 }
