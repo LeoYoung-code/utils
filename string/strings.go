@@ -11,38 +11,52 @@ import (
 	"github.com/samber/lo"
 )
 
+// UcFirst 将字符串首字母大写
 func UcFirst(str string) string {
-	strLen := len(str)
-	if strLen == 0 {
+	if str == "" {
 		return ""
-	} else if strLen == 1 {
-		return strings.ToUpper(str)
-	} else {
-		return strings.ToUpper(str[:1]) + str[1:]
 	}
+	r, size := utf8.DecodeRuneInString(str)
+	return string(unicode.ToUpper(r)) + str[size:]
 }
 
+// LcFirst 将字符串首字母小写
 func LcFirst(str string) string {
-	strLen := len(str)
-	if strLen == 0 {
+	if str == "" {
 		return ""
-	} else if strLen == 1 {
-		return strings.ToLower(str)
-	} else {
-		return strings.ToLower(str[:1]) + str[1:]
 	}
+	r, size := utf8.DecodeRuneInString(str)
+	return string(unicode.ToLower(r)) + str[size:]
 }
 
 // GoSanitized converts a string to a valid Go identifier.
 func GoSanitized(s string) string {
-	// Sanitize the input to the set of valid characters,
-	// which must be '_' or be in the Unicode L or N categories.
-	s = strings.Map(func(r rune) rune {
-		if unicode.IsLetter(r) || unicode.IsDigit(r) {
-			return r
+	// Fast path: check if we can skip sanitization
+	valid := true
+	for _, r := range s {
+		if !unicode.IsLetter(r) && !unicode.IsDigit(r) && r != '_' {
+			valid = false
+			break
 		}
-		return '_'
-	}, s)
+	}
+	if valid {
+		// Check for keyword conflict
+		if token.Lookup(s).IsKeyword() {
+			return "_" + s
+		}
+		return s
+	}
+
+	// Sanitize the input using strings.Builder for better performance
+	var b strings.Builder
+	for _, r := range s {
+		if unicode.IsLetter(r) || unicode.IsDigit(r) || r == '_' {
+			b.WriteRune(r)
+		} else {
+			b.WriteRune('_')
+		}
+	}
+	s = b.String()
 
 	// Prepend '_' in the event of a Go keyword conflict or if
 	// the identifier is invalid (does not start in the Unicode L category).

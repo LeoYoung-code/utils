@@ -6,40 +6,38 @@ import (
 )
 
 func TestGoSanitized(t *testing.T) {
-	type args struct {
-		s string
-	}
 	tests := []struct {
-		name string
-		args args
-		want string
+		name  string
+		input string
+		want  string
 	}{
 		{
-			name: "1",
-			args: args{
-				s: "hello world",
-			},
-			want: "hello_world",
+			name:  "Simple space",
+			input: "hello world",
+			want:  "hello_world",
 		},
 		{
-			name: "2",
-			args: args{
-				s: "hello world a",
-			},
-			want: "hello_world_a",
+			name:  "Keyword conflict",
+			input: "func",
+			want:  "_func",
 		},
 		{
-			name: "3",
-			args: args{
-				s: "hello",
-			},
-			want: "hello",
+			name:  "Invalid start char",
+			input: "123abc",
+			want:  "_123abc",
+		},
+		{
+			name:  "Mixed special chars",
+			input: "a-b.c@d",
+			want:  "a_b_c_d",
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := GoSanitized(tt.args.s); got != tt.want {
-				t.Errorf("GoSanitized() = %v, want %v", got, tt.want)
+			got := GoSanitized(tt.input)
+			if got != tt.want {
+				t.Errorf("GoSanitized(%q) = %q; want %q", tt.input, got, tt.want)
 			}
 		})
 	}
@@ -86,20 +84,43 @@ func TestLcFirst(t *testing.T) {
 }
 
 func TestUcFirst(t *testing.T) {
-	type args struct {
-		str string
-	}
 	tests := []struct {
-		name string
-		args args
-		want string
+		name  string
+		input string
+		want  string
 	}{
-		// TODO: Add test cases.
+		{
+			name:  "Empty string",
+			input: "",
+			want:  "",
+		},
+		{
+			name:  "Single lowercase",
+			input: "a",
+			want:  "A",
+		},
+		{
+			name:  "Single uppercase",
+			input: "A",
+			want:  "A",
+		},
+		{
+			name:  "Multiple characters",
+			input: "hello world",
+			want:  "Hello world",
+		},
+		{
+			name:  "Unicode character",
+			input: "👋hi",
+			want:  "👋hi",
+		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := UcFirst(tt.args.str); got != tt.want {
-				t.Errorf("UcFirst() = %v, want %v", got, tt.want)
+			got := UcFirst(tt.input)
+			if got != tt.want {
+				t.Errorf("UcFirst(%q) = %q; want %q", tt.input, got, tt.want)
 			}
 		})
 	}
@@ -262,5 +283,26 @@ func TestStringToBytes(t *testing.T) {
 				t.Errorf("StringToBytes() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func BenchmarkUcFirst(b *testing.B) {
+	str := "hello world"
+	for i := 0; i < b.N; i++ {
+		UcFirst(str)
+	}
+}
+
+func BenchmarkLcFirst(b *testing.B) {
+	str := "HELLO WORLD"
+	for i := 0; i < b.N; i++ {
+		LcFirst(str)
+	}
+}
+
+func BenchmarkGoSanitized(b *testing.B) {
+	str := "hello@world.com"
+	for i := 0; i < b.N; i++ {
+		GoSanitized(str)
 	}
 }
