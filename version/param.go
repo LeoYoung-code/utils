@@ -1,17 +1,22 @@
 package version
 
 import (
-	"strings"
-
-	"github.com/LeoYoung-code/cast"
+	"strconv"
+	
 )
 
 // GetSysVersion 系统版本号 字符串格式转int 如"10.2"转10
 func GetSysVersion(versionStr string) int64 {
-	index := strings.Index(versionStr, ".")
-	if index >= 0 {
-		versionStr = versionStr[0:index]
+	if versionStr == "" {
+		return 0
 	}
-	versionInt, _ := cast.ToInt64E(versionStr)
+
+	parts := strings.SplitN(versionStr, ".", 2)
+	versionStr = parts[0]
+
+	versionInt, err := strconv.ParseInt(versionStr, 10, 64)
+	if err != nil {
+		return 0
+	}
 	return versionInt
 }

@@ -31,16 +31,37 @@ func TestGetSysVersion(t *testing.T) {
 			want: 10,
 		},
 		{
-			name: "test3",
+			name: "empty_string",
 			args: args{
 				versionStr: "",
 			},
 			want: 0,
 		},
 		{
-			name: "test4",
+			name: "non_numeric_prefix",
 			args: args{
-				versionStr: "https://gopherize.me/goph",
+				versionStr: "v1.2.3",
+			},
+			want: 0,
+		},
+		{
+			name: "invalid_number",
+			args: args{
+				versionStr: "abc.def",
+			},
+			want: 0,
+		},
+		{
+			name: "single_number",
+			args: args{
+				versionStr: "5",
+			},
+			want: 5,
+		},
+		{
+			name: "multiple_dots",
+			args: args{
+				versionStr: "10.2.3.4",
 			},
 			want: 10,
 		},
