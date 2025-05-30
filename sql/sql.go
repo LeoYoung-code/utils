@@ -4,15 +4,21 @@ import (
 	"strconv"
 	"strings"
 
-	"utils"
+	"github.com/samber/lo"
 )
 
 // InSliceInt64 拼接SQL in
 func InSliceInt64(opt, field string, s []int64) string {
-	sql := utils.Reduce(s, "", func(sql string, i int64) string {
-		sql = sql + "," + strconv.FormatInt(i, 10)
-		return sql
-	})
+	var b strings.Builder
+	sql := lo.Reduce(s, func(agg string, item int64, _ int) string {
+		b.WriteString(",")
+		b.WriteString(strconv.FormatInt(item, 10))
+		return b.String()
+	}, "")
+
+	if len(sql) == 0 {
+		return ""
+	}
 	return " " + opt + " " + field + " IN (" + sql[1:] + ")"
 }
 

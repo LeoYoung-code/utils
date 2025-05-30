@@ -2,7 +2,7 @@ package version
 
 import (
 	"strconv"
-	
+	"strings"
 )
 
 // GetSysVersion 系统版本号 字符串格式转int 如"10.2"转10
