@@ -1,47 +1,75 @@
 package gc
 
 import (
+	"bytes"
+	"encoding/json"
+	"os"
 	"testing"
+	"time"
 )
 
 func TestPrintGCStats(t *testing.T) {
-	tests := []struct {
-		name string
-	}{
-		{
-			name: "test1",
-		},
-		{
-			name: "test2",
-		},
+	// Redirect stdout to capture output
+	r, w, _ := os.Pipe()
+	old := os.Stdout
+	os.Stdout = w
+
+	// Run GC stats collection
+	go printGCStats()
+	time.Sleep(2 * time.Second) // Allow time for GC to run
+
+	// Restore stdout
+	os.Stdout = old
+	_ = w.Close()
+
+	var buf bytes.Buffer
+	_, _ = buf.ReadFrom(r)
+	output := buf.String()
+
+	// Validate JSON format
+	var m map[string]interface{}
+	if err := json.Unmarshal([]byte(output), &m); err != nil {
+		t.Errorf("Invalid JSON output: %v", err)
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			go printGCStats()
-			for i := 0; i < 100000; i++ {
-				_ = make([]byte, 1<<20)
-			}
-		})
+
+	// Verify required fields
+	requiredFields := []string{"NumGC", "PauseTotal", "LastGC"}
+	for _, field := range requiredFields {
+		if _, exists := m[field]; !exists {
+			t.Errorf("Missing required field: %s", field)
+		}
 	}
 }
 
 func TestPrintMemStats(t *testing.T) {
-	tests := []struct {
-		name string
-	}{
-		{
-			name: "test1",
-		},
-		{
-			name: "test2",
-		},
+	// Redirect stdout to capture output
+	r, w, _ := os.Pipe()
+	old := os.Stdout
+	os.Stdout = w
+
+	// Run mem stats collection
+	go printMemStats()
+	time.Sleep(2 * time.Second) // Allow time for stats to update
+
+	// Restore stdout
+	os.Stdout = old
+	_ = w.Close()
+
+	var buf bytes.Buffer
+	_, _ = buf.ReadFrom(r)
+	output := buf.String()
+
+	// Validate JSON format
+	var m map[string]interface{}
+	if err := json.Unmarshal([]byte(output), &m); err != nil {
+		t.Errorf("Invalid JSON output: %v", err)
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			go printMemStats()
-			for i := 0; i < 100000; i++ {
-				_ = make([]byte, 1<<20)
-			}
-		})
+
+	// Verify memory stats are positive values
+	memoryFields := []string{"Alloc", "TotalAlloc", "HeapAlloc"}
+	for _, field := range memoryFields {
+		if val, ok := m[field].(float64); !ok || val <= 0 {
+			t.Errorf("Invalid value for %s: %v", field, val)
+		}
 	}
 }
