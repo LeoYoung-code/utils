@@ -3,6 +3,8 @@ package cache
 import (
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSetGoCache(t *testing.T) {
@@ -37,8 +39,133 @@ func TestSetGoCache(t *testing.T) {
 		t.Logf("3 - val(%T): %v, ok: %+v", val3, val3, ok3)
 		t.Logf("4 - val(%T): %v, ok: %+v", val4, val4, ok4)
 
-		DelGoCache("K2")
+		cacheDriver.Delete("K2")
 
 		time.Sleep(time.Second * 1)
+	}
+}
+
+func TestGetGoCache(t *testing.T) {
+	type args struct {
+		key        string
+		defaultVal any
+	}
+
+	tests := []struct {
+		name     string
+		setup    func()
+		args     args
+		wantVal  any
+		wantBool bool
+	}{
+		{
+			name: "Normal Case",
+			setup: func() {
+				SetGoCache[string]("test_key", "test_value", defaultExpire)
+			},
+			args: args{
+				key:        "test_key",
+				defaultVal: "default",
+			},
+			wantVal:  "test_value",
+			wantBool: true,
+		},
+		{
+			name: "Type Mismatch",
+			setup: func() {
+				SetGoCache[int]("test_key", 123, defaultExpire)
+			},
+			args: args{
+				key:        "test_key",
+				defaultVal: "default",
+			},
+			wantVal:  "default",
+			wantBool: false,
+		},
+		{
+			name: "Nil Value",
+			setup: func() {
+				// Go的泛型不支持直接使用nil作为类型参数，改用空结构体代替
+				type emptyStruct struct{}
+				SetGoCache[emptyStruct]("nil_key", emptyStruct{}, defaultExpire)
+			},
+			args: args{
+				key:        "nil_key",
+				defaultVal: "default",
+			},
+			wantVal:  "default",
+			wantBool: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.setup()
+			gotVal, gotBool := GetGoCache(tt.args.key, tt.args.defaultVal)
+			assert.Equal(t, tt.wantBool, gotBool)
+			assert.Equal(t, tt.wantVal, gotVal)
+		})
+	}
+}
+
+func TestDelGoCache(t *testing.T) {
+	// 设置测试键值
+	SetGoCache[string]("delete_key", "value_to_delete", defaultExpire)
+
+	// 删除缓存
+	cacheDriver.Delete("delete_key")
+
+	// 验证删除是否成功
+	_, exists := GetGoCache[string]("delete_key", "")
+	assert.False(t, exists, "缓存删除失败")
+}
+
+func TestDeepCopy(t *testing.T) {
+	type sourceStruct struct {
+		Name string
+		Age  int
+	}
+
+	type targetStruct struct {
+		Name string
+		Age  int
+	}
+
+	tests := []struct {
+		name       string
+		source     any
+		target     any
+		wantErr    bool
+		beforeFunc func()
+	}{
+		{
+			name:   "Valid Copy",
+			source: &sourceStruct{Name: "Alice", Age: 30},
+			target: &targetStruct{},
+			beforeFunc: func() {
+				// 初始化目标对象
+			},
+			wantErr: false,
+		},
+		{
+			name:   "Invalid Type",
+			source: "not a struct",
+			target: &targetStruct{},
+			beforeFunc: func() {
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.beforeFunc()
+			err := DeepCopy(tt.target, tt.source)
+			if tt.wantErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
 	}
 }
