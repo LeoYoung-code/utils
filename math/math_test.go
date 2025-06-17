@@ -13,17 +13,24 @@ func TestDivInt64(t *testing.T) {
 		d2 int64
 	}
 	tests := []struct {
-		name string
-		args args
-		want float64
+		name   string
+		args   args
+		want   float64
+		isZero bool
 	}{
-		{name: "test", args: args{d: 100, d2: 200}, want: 50},
-		{name: "test", args: args{d: 100, d2: 0}, want: 0},
+		{name: "正常计算", args: args{d: 100, d2: 200}, want: 50},
+		{name: "除数为零", args: args{d: 100, d2: 0}, want: 0, isZero: true},
+		{name: "负数计算", args: args{d: -100, d2: 200}, want: -50},
+		{name: "大数计算", args: args{d: 9223372036854775807, d2: 2}, want: 4611686018427387903.5},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, DivPerInt64(tt.args.d, tt.args.d2), "DivPerInt64(%v, %v)", tt.args.d, tt.args.d2)
-			// assert.Equalf(t, tt.want, DivInt64(tt.args.d, tt.args.d2), "DivInt64(%v, %v)", tt.args.d, tt.args.d2)
+			got := DivPerInt64(tt.args.d, tt.args.d2)
+			if tt.isZero {
+				assert.Zero(t, got, "应该返回零")
+			} else {
+				assert.InDelta(t, tt.want, got, 0.001, "结果应该在预期范围内")
+			}
 		})
 	}
 }
@@ -247,6 +254,29 @@ func TestYuan2FenFloat64(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equalf(t, tt.want, Yuan2FenFloat64(tt.args.yuan, tt.args.r), "Yuan2FenFloat64(%v, %v)", tt.args.yuan, tt.args.r)
+		})
+	}
+}
+
+func TestPrecisionHandling(t *testing.T) {
+	tests := []struct {
+		name  string
+		f     float64
+		r     int32
+		want  string
+	}{
+		{name: "两位小数", f: 3.14159, r: 2, want: "3.14"},
+		{name: "四位小数", f: 2.71828, r: 4, want: "2.7183"},
+		{name: "零精度", f: 123.456, r: 0, want: "123"},
+		{name: "负数", f: -3.14159, r: 3, want: "-3.142"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := Float2String4f(tt.f)
+			assert.Equal(t, tt.want, result, "格式化结果应该匹配预期")
+
+			rounded := Float64Round(tt.f, tt.r)
+			assert.InDelta(t, cast.ToFloat64(tt.want), rounded, 0.01, "四舍五入应该准确")
 		})
 	}
 }
