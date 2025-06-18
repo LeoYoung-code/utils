@@ -21,7 +21,7 @@ func TestDivInt64(t *testing.T) {
 		{name: "正常计算", args: args{d: 100, d2: 200}, want: 50},
 		{name: "除数为零", args: args{d: 100, d2: 0}, want: 0, isZero: true},
 		{name: "负数计算", args: args{d: -100, d2: 200}, want: -50},
-		{name: "大数计算", args: args{d: 9223372036854775807, d2: 2}, want: 4611686018427387903.5},
+		{name: "大数计算", args: args{d: 9223372036854775807, d2: 2}, want: 461168601842738790350},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -260,10 +260,10 @@ func TestYuan2FenFloat64(t *testing.T) {
 
 func TestPrecisionHandling(t *testing.T) {
 	tests := []struct {
-		name  string
-		f     float64
-		r     int32
-		want  string
+		name string
+		f    float64
+		r    int32
+		want string
 	}{
 		{name: "两位小数", f: 3.14159, r: 2, want: "3.14"},
 		{name: "四位小数", f: 2.71828, r: 4, want: "2.7183"},
@@ -272,7 +272,7 @@ func TestPrecisionHandling(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := Float2String4f(tt.f)
+			result := Float2StringWithPrecision(tt.f, tt.r)
 			assert.Equal(t, tt.want, result, "格式化结果应该匹配预期")
 
 			rounded := Float64Round(tt.f, tt.r)

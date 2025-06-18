@@ -146,3 +146,71 @@ func Float64Round(f float64, r int32) float64 {
 	res, _ := decimal.NewFromFloat(f).Round(r).Float64()
 	return res
 }
+
+// DivPerInt64 对int64类型进行百分比除法运算
+func DivPerInt64(d, d2 int64) float64 {
+	if d2 == 0 {
+		return 0
+	}
+	dd := decimal.NewFromInt(d)
+	dd2 := decimal.NewFromInt(d2)
+	result := dd.Mul(decimal.NewFromInt(100)).Div(dd2)
+	f, _ := result.Float64()
+	return f
+}
+
+// String2Float64 将字符串转换为float64
+func String2Float64(s string) float64 {
+	dd := parseDecimal(s)
+	if dd == nil {
+		return 0
+	}
+	f, _ := dd.Float64()
+	return f
+}
+
+// DivInt64 对int64类型进行除法运算，带精度控制
+func DivInt64(d, d2 int64, r int32) float64 {
+	if d2 == 0 {
+		return 0
+	}
+	dd := decimal.NewFromInt(d)
+	dd2 := decimal.NewFromInt(d2)
+	result := dd.Div(dd2).Round(r)
+	f, _ := result.Float64()
+	return f
+}
+
+// DivStringRound 字符串除法，带精度控制
+func DivStringRound(d, d2 string, r int32) float64 {
+	dd := parseDecimal(d)
+	dd2 := parseDecimal(d2)
+	if dd == nil || dd2 == nil || dd2.IsZero() {
+		return 0
+	}
+	result := dd.Div(*dd2).Round(r)
+	f, _ := result.Float64()
+	return f
+}
+
+// Fen2YuanFloat64 分转元，返回float64
+func Fen2YuanFloat64(fen float64, r int32) float64 {
+	dd := decimal.NewFromFloat(fen)
+	result := dd.Div(decimal.NewFromInt(100)).Round(r)
+	f, _ := result.Float64()
+	return f
+}
+
+// Yuan2FenFloat64 元转分，返回float64
+func Yuan2FenFloat64(yuan float64, r int32) float64 {
+	dd := decimal.NewFromFloat(yuan)
+	result := dd.Mul(decimal.NewFromInt(100)).Round(r)
+	f, _ := result.Float64()
+	return f
+}
+
+// Float2StringWithPrecision 根据指定精度格式化浮点数
+func Float2StringWithPrecision(f float64, r int32) string {
+	format := fmt.Sprintf("%%.%df", r)
+	return fmt.Sprintf(format, f)
+}
