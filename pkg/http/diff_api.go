@@ -74,7 +74,7 @@ func (a *APIComparer) printDivider(title string, isBegin bool) {
 	}
 	fmt.Printf("======================%s---%s=====================\n", title, status)
 	if !isBegin {
-		fmt.Println("\n")
+		fmt.Println()
 	}
 }
 

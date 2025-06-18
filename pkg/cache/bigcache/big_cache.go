@@ -179,3 +179,8 @@ func DeleteFromDefaultCache(key string) bool {
 	}
 	return true
 }
+
+// SetGoCache 设置到默认缓存的简化函数
+func SetGoCache(key string, val []byte) {
+	SetToDefaultCache(key, val)
+}

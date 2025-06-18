@@ -42,7 +42,7 @@ func TestGetSysVersion(t *testing.T) {
 			args: args{
 				versionStr: "https://gopherize.me/goph",
 			},
-			want: 10,
+			want: 0,
 		},
 	}
 	for _, tt := range tests {

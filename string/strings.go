@@ -40,8 +40,9 @@ func GoSanitized(s string) string {
 		}
 	}
 	if valid {
-		// Check for keyword conflict
-		if token.Lookup(s).IsKeyword() {
+		// Check for keyword conflict or invalid start character
+		r, _ := utf8.DecodeRuneInString(s)
+		if token.Lookup(s).IsKeyword() || !unicode.IsLetter(r) {
 			return "_" + s
 		}
 		return s

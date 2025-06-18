@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/allegro/bigcache/v3"
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 func TestSetGoCache(t *testing.T) {
@@ -61,7 +62,13 @@ func TestNewCache(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			ctx := context.Background()
-			got := NewCache(ctx)
+			cfg := DefaultConfig()
+			logger := log.DefaultLogger
+			got, err := NewCache(ctx, cfg, logger)
+			if err != nil {
+				t.Errorf("NewCache() error = %v", err)
+				return
+			}
 			if got == nil {
 				t.Error("Cache should not be nil")
 			}

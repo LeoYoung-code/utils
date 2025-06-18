@@ -2,6 +2,7 @@ package _map
 
 import (
 	"fmt"
+	"reflect"
 	"sort"
 )
 
@@ -135,4 +136,13 @@ func SequenceTraversalMap(m map[string]int) {
 	for _, key := range keys {
 		fmt.Println(key, m[key])
 	}
+}
+
+// GetStructName 获取结构体名称
+func GetStructName(v interface{}) string {
+	t := reflect.TypeOf(v)
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+	return t.Name()
 }

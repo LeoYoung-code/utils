@@ -19,14 +19,14 @@ func InSliceInt64(opt, field string, s []int64) string {
 	if len(sql) == 0 {
 		return ""
 	}
-	return " " + opt + " " + field + " IN (" + sql[1:] + ")"
+	return " " + opt + " `" + field + "` IN (" + sql[1:] + ")"
 }
 
 // InSliceString 拼接SQL in
 func InSliceString(opt, field string, s []string) string {
 	ss := strings.Join(s, "','")
 	if len(ss) > 0 {
-		return " " + opt + " " + field + " IN ('" + ss + "')"
+		return " " + opt + " `" + field + "` IN ('" + ss + "')"
 	}
 	return ""
 }
